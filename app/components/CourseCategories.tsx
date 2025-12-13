@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useCart } from '@/app/context/cart-context'
 import { Container } from '@/app/components/Container'
 import { SkeletonLoader } from '@/app/components/SkeletonLoader'
+import { ShoppingCart as ShoppingCartIcon } from 'lucide-react'
 
 const categories = [
   { id: 'all', name: 'All Courses' },
@@ -206,9 +207,7 @@ export function CourseCategories() {
                       onClick={() => handleAddToCart(course)}
                       className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                      </svg>
+                      <ShoppingCartIcon className="h-4 w-4 mr-2" />
                       Add to Cart
                     </button>
                   </div>

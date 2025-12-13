@@ -1,7 +1,7 @@
 'use client'
 
 import { useCart } from '@/app/context/cart-context'
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/app/components/ui/sheet'
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { Button } from '@/app/components/Button'
 import { ShoppingCart as ShoppingCartIcon } from 'lucide-react'
 
@@ -16,7 +16,7 @@ export function ShoppingCart() {
           Cart ({cartCount})
         </Button>
       </SheetTrigger>
-      <SheetContent className="w-full sm:max-w-lg">
+      <SheetContent side="right" className="w-full sm:max-w-lg">
         <SheetHeader>
           <SheetTitle>Shopping Cart</SheetTitle>
         </SheetHeader>

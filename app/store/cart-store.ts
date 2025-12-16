@@ -45,6 +45,10 @@ export const useCartStore = create<CartStore>()(
             }
           }
         })
+        // Ensure the cart opens after adding an item
+        setTimeout(() => {
+          set({ isCartOpen: true })
+        }, 0)
       },
       
       removeFromCart: (id) => {

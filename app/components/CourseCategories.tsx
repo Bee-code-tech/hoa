@@ -116,7 +116,9 @@ export function CourseCategories() {
       price: course.price
     });
     // Open the cart sidebar after adding an item
-    openCart();
+    setTimeout(() => {
+      openCart();
+    }, 0);
   };
   
   // Check if a course is already in the cart
@@ -125,13 +127,13 @@ export function CourseCategories() {
   };
 
   return (
-    <section id="courses" className="py-20 sm:py-32 bg-white">
+    <section id="courses" className="py-20 sm:py-32 bg-brand-light">
       <Container>
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="font-display text-3xl tracking-tight text-slate-900 sm:text-4xl">
+          <h2 className="font-display text-3xl tracking-tight text-brand-secondary sm:text-4xl">
             Browse Our Course Library
           </h2>
-          <p className="mt-4 text-lg tracking-tight text-slate-700">
+          <p className="mt-4 text-lg tracking-tight text-brand-secondary/80">
             Find the perfect course to advance your career
           </p>
         </div>
@@ -149,8 +151,8 @@ export function CourseCategories() {
               }}
               className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-md ${
                 selectedCategory === category.id
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                  ? 'bg-brand-primary text-brand-light shadow-md'
+                  : 'bg-brand-light text-brand-secondary border border-brand-accent/30 hover:bg-brand-accent/10'
               }`}
             >
               {category.name}
@@ -173,21 +175,21 @@ export function CourseCategories() {
               return (
                 <div 
                   key={course.id} 
-                  className="flex flex-col overflow-hidden rounded-2xl border border-slate-200 hover:border-blue-600 hover:shadow-lg transition-all duration-300"
+                  className="flex flex-col overflow-hidden rounded-2xl border border-brand-accent/20 hover:border-brand-primary hover:shadow-lg transition-all duration-300"
                 >
-                  <div className="aspect-video bg-gradient-to-br from-blue-500 to-indigo-700" />
+                  <div className="aspect-video bg-gradient-to-br from-brand-primary to-brand-secondary" />
                   <div className="flex flex-1 flex-col p-6">
                     <div className="flex items-center">
                       <div className="flex-shrink-0">
                         <div className="bg-gray-200 border-2 border-dashed rounded-xl w-10 h-10" />
                       </div>
                       <div className="ml-3">
-                        <p className="text-sm font-medium text-slate-900">{course.instructor}</p>
-                        <p className="text-sm text-slate-500">{course.instructorTitle}</p>
+                        <p className="text-sm font-medium text-brand-secondary">{course.instructor}</p>
+                        <p className="text-sm text-brand-secondary/70">{course.instructorTitle}</p>
                       </div>
                     </div>
-                    <h3 className="mt-4 text-lg font-semibold text-slate-900">{course.title}</h3>
-                    <p className="mt-2 text-sm text-slate-600 line-clamp-2">{course.description}</p>
+                    <h3 className="mt-4 text-lg font-semibold text-brand-secondary">{course.title}</h3>
+                    <p className="mt-2 text-sm text-brand-secondary/80 line-clamp-2">{course.description}</p>
                     <div className="mt-4 flex items-center">
                       <div className="flex items-center">
                         <div className="flex items-center">
@@ -203,23 +205,23 @@ export function CourseCategories() {
                             </svg>
                           ))}
                         </div>
-                        <span className="ml-2 text-sm text-slate-500">({course.reviews})</span>
+                        <span className="ml-2 text-sm text-brand-secondary/70">({course.reviews})</span>
                       </div>
                       {course.bestseller && (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 ml-4">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-brand-accent/20 text-brand-primary ml-4">
                           Bestseller
                         </span>
                       )}
                     </div>
                     <div className="mt-6 flex items-center justify-between">
-                      <span className="text-2xl font-bold text-slate-900">${course.price}</span>
+                      <span className="text-2xl font-bold text-brand-secondary">${course.price}</span>
                       <button 
                         onClick={() => handleAddToCart(course)}
                         disabled={inCart}
-                        className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white transition-all duration-300 transform hover:scale-105 ${
+                        className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-brand-light transition-all duration-300 transform hover:scale-105 ${
                           inCart 
-                            ? 'bg-green-500 cursor-default' 
-                            : 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
+                            ? 'bg-brand-accent cursor-default' 
+                            : 'bg-brand-primary hover:bg-brand-secondary cursor-pointer'
                         }`}
                       >
                         {inCart ? (

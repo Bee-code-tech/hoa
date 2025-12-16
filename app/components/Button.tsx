@@ -5,21 +5,21 @@ import clsx from 'clsx'
 
 const variantStyles = {
   primary:
-    'rounded-full bg-blue-600 py-2 px-4 text-sm font-semibold text-white hover:bg-blue-500 active:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+    'rounded-full bg-brand-primary py-2 px-4 text-sm font-semibold text-brand-light hover:bg-brand-secondary active:bg-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-accent focus:ring-offset-2 inline-flex items-center',
   secondary:
-    'rounded-full bg-slate-50 py-2 px-4 text-sm font-medium text-slate-900 hover:bg-slate-100 active:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2',
+    'rounded-full bg-brand-light/20 py-2 px-4 text-sm font-medium text-brand-light hover:bg-brand-light/30 active:bg-brand-light/20 focus:outline-none focus:ring-2 focus:ring-brand-accent focus:ring-offset-2 inline-flex items-center',
   outline:
-    'rounded-full py-2 px-4 text-sm font-medium text-slate-700 hover:text-slate-900 active:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2',
+    'rounded-full py-2 px-4 text-sm font-medium text-brand-light hover:text-brand-light active:bg-brand-light/10 focus:outline-none focus:ring-2 focus:ring-brand-accent focus:ring-offset-2 border border-brand-light/30 inline-flex items-center',
   ghost:
-    'text-slate-700 hover:text-slate-900 active:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2',
+    'text-brand-light hover:text-brand-light active:bg-brand-light/10 focus:outline-none focus:ring-2 focus:ring-brand-accent focus:ring-offset-2 inline-flex items-center',
 }
 
 type VariantKey = keyof typeof variantStyles
 
 const colorStyles = {
-  blue: 'focus:ring-blue-500 focus:ring-offset-blue-50',
-  white: 'focus:ring-slate-500 focus:ring-offset-white',
-  slate: 'focus:ring-slate-500 focus:ring-offset-slate-50',
+  primary: 'focus:ring-brand-primary focus:ring-offset-brand-light',
+  accent: 'focus:ring-brand-accent focus:ring-offset-brand-light',
+  light: 'focus:ring-brand-light focus:ring-offset-brand-primary',
 }
 
 type ColorKey = keyof typeof colorStyles
@@ -28,7 +28,7 @@ const baseStyles = 'transition-all duration-200 transform cursor-pointer hover:s
 
 export function Button({
   variant = 'primary',
-  color = 'blue',
+  color = 'primary',
   className,
   href,
   ...props

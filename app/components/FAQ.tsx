@@ -38,13 +38,13 @@ export function FAQ() {
   };
 
   return (
-    <section id="faq" className="py-20 sm:py-32 bg-white">
+    <section id="faq" className="py-20 sm:py-32 bg-brand-light">
       <Container>
         <div className="mx-auto max-w-2xl md:text-center">
-          <h2 className="font-display text-3xl tracking-tight text-slate-900 sm:text-4xl">
+          <h2 className="font-display text-3xl tracking-tight text-brand-secondary sm:text-4xl">
             Frequently asked questions
           </h2>
-          <p className="mt-4 text-lg tracking-tight text-slate-700">
+          <p className="mt-4 text-lg tracking-tight text-brand-secondary/80">
             Everything you need to know about the platform.
           </p>
         </div>
@@ -52,14 +52,14 @@ export function FAQ() {
         <div className="mx-auto mt-16 max-w-3xl">
           <div className="space-y-6">
             {faqs.map((faq, index) => (
-              <div key={index} className="border border-slate-200 rounded-2xl">
+              <div key={index} className="border border-brand-accent/30 rounded-2xl">
                 <button
                   className="flex justify-between items-center w-full p-6 text-left"
                   onClick={() => toggleFAQ(index)}
                 >
-                  <span className="text-lg font-semibold text-slate-900">{faq.question}</span>
+                  <span className="text-lg font-semibold text-brand-secondary">{faq.question}</span>
                   <svg 
-                    className={`h-6 w-6 text-slate-500 transition-transform duration-300 ${openIndex === index ? 'rotate-180' : ''}`} 
+                    className={`h-6 w-6 text-brand-secondary/70 transition-transform duration-300 ${openIndex === index ? 'rotate-180' : ''}`} 
                     xmlns="http://www.w3.org/2000/svg" 
                     fill="none" 
                     viewBox="0 0 24 24" 
@@ -69,7 +69,7 @@ export function FAQ() {
                   </svg>
                 </button>
                 {openIndex === index && (
-                  <div className="px-6 pb-6 text-slate-600">
+                  <div className="px-6 pb-6 text-brand-secondary/80">
                     <p>{faq.answer}</p>
                   </div>
                 )}

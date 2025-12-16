@@ -69,39 +69,39 @@ function Plan({
     <section
       className={clsx(
         'flex flex-col rounded-3xl px-6 sm:px-8',
-        featured ? 'order-first bg-blue-600 py-8 lg:order-0' : 'lg:py-8',
+        featured ? 'order-first bg-brand-primary py-8 lg:order-0' : 'lg:py-8',
       )}
     >
-      <h3 className="mt-5 font-display text-lg text-white">{name}</h3>
+      <h3 className="mt-5 font-display text-lg text-brand-light">{name}</h3>
       <p
         className={clsx(
           'mt-2 text-base',
-          featured ? 'text-white' : 'text-slate-400',
+          featured ? 'text-brand-light' : 'text-brand-light/70',
         )}
       >
         {description}
       </p>
-      <p className="order-first font-display text-5xl font-light tracking-tight text-white">
+      <p className="order-first font-display text-5xl font-light tracking-tight text-brand-light">
         {price}
       </p>
       <ul
         role="list"
         className={clsx(
           'order-last mt-10 flex flex-col gap-y-3 text-sm',
-          featured ? 'text-white' : 'text-slate-200',
+          featured ? 'text-brand-light' : 'text-brand-light/80',
         )}
       >
         {features.map((feature) => (
           <li key={feature} className="flex">
-            <CheckIcon className={featured ? 'text-white' : 'text-slate-400'} />
+            <CheckIcon className={featured ? 'text-brand-light' : 'text-brand-light/60'} />
             <span className="ml-4">{feature}</span>
           </li>
         ))}
       </ul>
       <Button
         href={href}
-        variant={featured ? 'solid' : 'outline'}
-        color="white"
+        variant={featured ? 'primary' : 'outline'}
+        color="light"
         className="mt-8"
         aria-label={`Get started with the ${name} plan for ${price}`}
       >
@@ -116,18 +116,18 @@ export function Pricing() {
     <section
       id="pricing"
       aria-label="Pricing"
-      className="bg-slate-900 py-20 sm:py-32"
+      className="bg-brand-secondary py-20 sm:py-32"
     >
       <Container>
         <div className="md:text-center">
-          <h2 className="font-display text-3xl tracking-tight text-white sm:text-4xl">
+          <h2 className="font-display text-3xl tracking-tight text-brand-light sm:text-4xl">
             <span className="relative whitespace-nowrap">
-              <SwirlyDoodle className="absolute top-1/2 left-0 h-[1em] w-full fill-blue-400" />
+              <SwirlyDoodle className="absolute top-1/2 left-0 h-[1em] w-full fill-brand-accent" />
               <span className="relative">Simple pricing,</span>
             </span>{' '}
             for everyone.
           </h2>
-          <p className="mt-4 text-lg text-slate-400">
+          <p className="mt-4 text-lg text-brand-light/70">
             It doesn't matter what size your business is, our platform works great for everyone.
           </p>
         </div>

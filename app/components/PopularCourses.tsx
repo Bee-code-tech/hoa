@@ -65,17 +65,19 @@ export function PopularCourses() {
       price: course.price
     });
     // Open the cart sidebar after adding an item
-    openCart();
+    setTimeout(() => {
+      openCart();
+    }, 0);
   };
 
   return (
-    <section className="py-20 sm:py-32 bg-white">
+    <section className="py-20 sm:py-32 bg-brand-light">
       <Container>
         <div className="mx-auto max-w-2xl md:text-center">
-          <h2 className="font-display text-3xl tracking-tight text-slate-900 sm:text-4xl">
+          <h2 className="font-display text-3xl tracking-tight text-brand-secondary sm:text-4xl">
             Popular Courses
           </h2>
-          <p className="mt-4 text-lg tracking-tight text-slate-700">
+          <p className="mt-4 text-lg tracking-tight text-brand-secondary/80">
             Most enrolled courses by our students
           </p>
         </div>
@@ -92,19 +94,19 @@ export function PopularCourses() {
               const inCart = isCourseInCart(course.id);
               
               return (
-                <div key={course.id} className="flex flex-col overflow-hidden rounded-2xl border border-slate-200">
-                  <div className="aspect-video bg-gradient-to-br from-blue-500 to-indigo-700" />
+                <div key={course.id} className="flex flex-col overflow-hidden rounded-2xl border border-brand-accent/20">
+                  <div className="aspect-video bg-gradient-to-br from-brand-primary to-brand-secondary" />
                   <div className="flex flex-1 flex-col p-6">
                     <div className="flex items-center">
                       <div className="flex-shrink-0">
                         <div className="bg-gray-200 border-2 border-dashed rounded-xl w-10 h-10" />
                       </div>
                       <div className="ml-3">
-                        <p className="text-sm font-medium text-slate-900">{course.instructor}</p>
-                        <p className="text-sm text-slate-500">{course.instructorTitle}</p>
+                        <p className="text-sm font-medium text-brand-secondary">{course.instructor}</p>
+                        <p className="text-sm text-brand-secondary/70">{course.instructorTitle}</p>
                       </div>
                     </div>
-                    <h3 className="mt-4 text-lg font-semibold text-slate-900">{course.title}</h3>
+                    <h3 className="mt-4 text-lg font-semibold text-brand-secondary">{course.title}</h3>
                     <div className="mt-4 flex items-center">
                       <div className="flex items-center">
                         <div className="flex items-center">
@@ -120,19 +122,19 @@ export function PopularCourses() {
                             </svg>
                           ))}
                         </div>
-                        <span className="ml-2 text-sm text-slate-500">({course.reviews})</span>
+                        <span className="ml-2 text-sm text-brand-secondary/70">({course.reviews})</span>
                       </div>
                       {course.bestseller && (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 ml-4">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-brand-accent/20 text-brand-primary ml-4">
                           Bestseller
                         </span>
                       )}
                     </div>
                     <div className="mt-6 flex items-center justify-between">
-                      <span className="text-2xl font-bold text-slate-900">${course.price}</span>
+                      <span className="text-2xl font-bold text-brand-secondary">${course.price}</span>
                       {inCart ? (
                         <button 
-                          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-500 cursor-default"
+                          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-brand-light bg-brand-accent cursor-default"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -142,7 +144,7 @@ export function PopularCourses() {
                       ) : (
                         <button 
                           onClick={() => handleAddToCart(course)}
-                          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 cursor-pointer"
+                          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-brand-light bg-brand-primary hover:bg-brand-secondary transition-all duration-300 transform hover:scale-105 cursor-pointer"
                         >
                           <ShoppingCartIcon className="h-4 w-4 mr-2" />
                           Add to Cart

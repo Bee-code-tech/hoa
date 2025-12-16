@@ -3,6 +3,12 @@
 @theme {
   --font-sans: var(--font-inter);
   --font-display: var(--font-lexend);
+  
+  /* Brand Colors */
+  --color-brand-primary: #1C3163;
+  --color-brand-secondary: #000718;
+  --color-brand-accent: #D6B585;
+  --color-brand-light: #FEFFFF;
 }
 
 body {
@@ -11,7 +17,7 @@ body {
 
 /* Custom styles for the LMS platform */
 .hero-gradient {
-  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  background: linear-gradient(135deg, var(--color-brand-primary) 0%, var(--color-brand-secondary) 100%);
 }
 
 .card-hover {

@@ -1,24 +1,28 @@
 'use client'
 
-import { useCart } from '@/app/context/cart-context'
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
+import { useCartStore } from '@/app/store/cart-store'
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { Button } from '@/app/components/Button'
-import { ShoppingCart as ShoppingCartIcon } from 'lucide-react'
+import { ShoppingCart as ShoppingCartIcon, X } from 'lucide-react'
 
 export function ShoppingCart() {
-  const { cart, cartCount, cartTotal, removeFromCart, updateQuantity } = useCart()
+  const { cart, isCartOpen, closeCart, removeFromCart, updateQuantity, cartTotal, cartCount } = useCartStore()
 
   return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="outline" color="white">
-          <ShoppingCartIcon className="h-5 w-5 mr-2" />
-          Cart ({cartCount})
-        </Button>
-      </SheetTrigger>
+    <Sheet open={isCartOpen} onOpenChange={(open) => {
+      if (!open) closeCart()
+    }}>
       <SheetContent side="right" className="w-full sm:max-w-lg">
         <SheetHeader>
-          <SheetTitle>Shopping Cart</SheetTitle>
+          <div className="flex items-center justify-between">
+            <SheetTitle>Shopping Cart</SheetTitle>
+            <button 
+              onClick={closeCart}
+              className="p-2 rounded-md hover:bg-gray-100 transition-colors"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
         </SheetHeader>
         
         {cart.length === 0 ? (
@@ -33,6 +37,9 @@ export function ShoppingCart() {
               <ul className="-my-6 divide-y divide-slate-200">
                 {cart.map((item) => (
                   <li key={item.id} className="py-6 flex">
+                    <div className="flex-shrink-0">
+                      <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16" />
+                    </div>
                     <div className="ml-4 flex-1 flex flex-col">
                       <div>
                         <div className="flex justify-between text-base font-medium text-slate-900">
@@ -44,7 +51,7 @@ export function ShoppingCart() {
                         <div className="flex items-center">
                           <button 
                             onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                            className="text-slate-500 hover:text-slate-600"
+                            className="text-slate-500 hover:text-slate-600 p-1"
                           >
                             <span className="sr-only">Decrease quantity</span>
                             <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -56,7 +63,7 @@ export function ShoppingCart() {
                           
                           <button 
                             onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                            className="text-slate-500 hover:text-slate-600"
+                            className="text-slate-500 hover:text-slate-600 p-1"
                           >
                             <span className="sr-only">Increase quantity</span>
                             <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -82,7 +89,7 @@ export function ShoppingCart() {
             <div className="border-t border-slate-200 py-6 px-4 sm:px-6">
               <div className="flex justify-between text-base font-medium text-slate-900">
                 <p>Subtotal</p>
-                <p>${cartTotal.toFixed(2)}</p>
+                <p>${cartTotal().toFixed(2)}</p>
               </div>
               <p className="mt-0.5 text-sm text-slate-500">Shipping and taxes calculated at checkout.</p>
               <div className="mt-6">
@@ -91,12 +98,12 @@ export function ShoppingCart() {
                 </Button>
               </div>
               <div className="mt-6 flex justify-center text-sm text-center text-slate-500">
-                <p>
-                  or{' '}
-                  <SheetTrigger className="text-blue-600 font-medium hover:text-blue-500">
-                    Continue Shopping
-                  </SheetTrigger>
-                </p>
+                <button 
+                  onClick={closeCart}
+                  className="text-blue-600 font-medium hover:text-blue-500"
+                >
+                  Continue Shopping
+                </button>
               </div>
             </div>
           </div>

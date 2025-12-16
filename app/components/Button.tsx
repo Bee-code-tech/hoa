@@ -1,63 +1,54 @@
+'use client'
+
 import Link from 'next/link'
 import clsx from 'clsx'
 
-const baseStyles = {
-  solid:
-    'group inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2',
-  outline:
-    'group inline-flex ring-1 items-center justify-center rounded-full py-2 px-4 text-sm',
-}
-
 const variantStyles = {
-  solid: {
-    slate:
-      'bg-slate-900 text-white hover:bg-slate-700 hover:text-slate-100 active:bg-slate-800 active:text-slate-300 focus-visible:outline-slate-900',
-    blue: 'bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 focus-visible:outline-blue-600',
-    white:
-      'bg-white text-slate-900 hover:bg-blue-50 active:bg-blue-200 active:text-slate-600 focus-visible:outline-white',
-  },
-  outline: {
-    slate:
-      'ring-slate-200 text-slate-700 hover:text-slate-900 hover:ring-slate-300 active:bg-slate-100 active:text-slate-600 focus-visible:outline-blue-600 focus-visible:ring-slate-300',
-    white:
-      'ring-slate-700 text-white hover:ring-slate-500 active:ring-slate-700 active:text-slate-400 focus-visible:outline-white',
-  },
+  primary:
+    'rounded-full bg-blue-600 py-2 px-4 text-sm font-semibold text-white hover:bg-blue-500 active:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+  secondary:
+    'rounded-full bg-slate-50 py-2 px-4 text-sm font-medium text-slate-900 hover:bg-slate-100 active:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2',
+  outline:
+    'rounded-full py-2 px-4 text-sm font-medium text-slate-700 hover:text-slate-900 active:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2',
+  ghost:
+    'text-slate-700 hover:text-slate-900 active:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2',
 }
 
-type ButtonProps = (
-  | {
-      variant?: 'solid'
-      color?: keyof typeof variantStyles.solid
-    }
-  | {
-      variant: 'outline'
-      color?: keyof typeof variantStyles.outline
-    }
-) &
-  (
-    | Omit<React.ComponentPropsWithoutRef<typeof Link>, 'color'>
-    | (Omit<React.ComponentPropsWithoutRef<'button'>, 'color'> & {
-        href?: undefined
-      })
+type VariantKey = keyof typeof variantStyles
+
+const colorStyles = {
+  blue: 'focus:ring-blue-500 focus:ring-offset-blue-50',
+  white: 'focus:ring-slate-500 focus:ring-offset-white',
+  slate: 'focus:ring-slate-500 focus:ring-offset-slate-50',
+}
+
+type ColorKey = keyof typeof colorStyles
+
+const baseStyles = 'transition-all duration-200 transform cursor-pointer hover:scale-105 active:scale-95'
+
+export function Button({
+  variant = 'primary',
+  color = 'blue',
+  className,
+  href,
+  ...props
+}: React.ComponentPropsWithoutRef<'button'> & {
+  variant?: VariantKey
+  color?: ColorKey
+  href?: string
+}) {
+  const classes = clsx(
+    baseStyles,
+    variantStyles[variant],
+    colorStyles[color],
+    className
   )
 
-export function Button({ className, ...props }: ButtonProps) {
-  props.variant ??= 'solid'
-  props.color ??= 'slate'
-
-  className = clsx(
-    baseStyles[props.variant],
-    props.variant === 'outline'
-      ? variantStyles.outline[props.color]
-      : props.variant === 'solid'
-        ? variantStyles.solid[props.color]
-        : undefined,
-    className,
-  )
-
-  return typeof props.href === 'undefined' ? (
-    <button className={className} {...props} />
+  return href ? (
+    <Link href={href} className={classes}>
+      {props.children}
+    </Link>
   ) : (
-    <Link className={className} {...props} />
+    <button className={classes} {...props} />
   )
 }

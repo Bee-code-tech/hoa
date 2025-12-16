@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Lexend } from "next/font/google";
 import "./globals.css";
-import { CartProvider } from "@/app/context/cart-context";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -26,9 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${lexend.variable}`}>
       <body className="font-sans">
-        <CartProvider>
-          {children}
-        </CartProvider>
+        {children}
       </body>
     </html>
   );

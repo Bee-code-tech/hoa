@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useCart } from '@/app/context/cart-context'
+import { useCartStore } from '@/app/store/cart-store'
 import { Container } from '@/app/components/Container'
 import { SkeletonLoader } from '@/app/components/SkeletonLoader'
 import { ShoppingCart as ShoppingCartIcon } from 'lucide-react'
@@ -94,7 +94,7 @@ const courses = [
 export function CourseCategories() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [isLoading, setIsLoading] = useState(true);
-  const { addToCart } = useCart();
+  const { addToCart, cart, openCart } = useCartStore();
   
   // Simulate loading for demonstration
   useEffect(() => {
@@ -115,6 +115,13 @@ export function CourseCategories() {
       title: course.title,
       price: course.price
     });
+    // Open the cart sidebar after adding an item
+    openCart();
+  };
+  
+  // Check if a course is already in the cart
+  const isCourseInCart = (courseId: number) => {
+    return cart.some(item => item.id === courseId);
   };
 
   return (
@@ -140,9 +147,9 @@ export function CourseCategories() {
                 // Simulate loading when changing categories
                 setTimeout(() => setIsLoading(false), 1000);
               }}
-              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-colors ${
+              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-md ${
                 selectedCategory === category.id
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-blue-600 text-white shadow-md'
                   : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
             >
@@ -160,60 +167,80 @@ export function CourseCategories() {
             ))
           ) : (
             // Show actual course cards when loaded
-            filteredCourses.map((course) => (
-              <div 
-                key={course.id} 
-                className="flex flex-col overflow-hidden rounded-2xl border border-slate-200 hover:border-blue-600 hover:shadow-lg transition-all duration-300"
-              >
-                <div className="aspect-video bg-gradient-to-br from-blue-500 to-indigo-700" />
-                <div className="flex flex-1 flex-col p-6">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0">
-                      <div className="bg-gray-200 border-2 border-dashed rounded-xl w-10 h-10" />
-                    </div>
-                    <div className="ml-3">
-                      <p className="text-sm font-medium text-slate-900">{course.instructor}</p>
-                      <p className="text-sm text-slate-500">{course.instructorTitle}</p>
-                    </div>
-                  </div>
-                  <h3 className="mt-4 text-lg font-semibold text-slate-900">{course.title}</h3>
-                  <p className="mt-2 text-sm text-slate-600 line-clamp-2">{course.description}</p>
-                  <div className="mt-4 flex items-center">
+            filteredCourses.map((course) => {
+              const inCart = isCourseInCart(course.id);
+              
+              return (
+                <div 
+                  key={course.id} 
+                  className="flex flex-col overflow-hidden rounded-2xl border border-slate-200 hover:border-blue-600 hover:shadow-lg transition-all duration-300"
+                >
+                  <div className="aspect-video bg-gradient-to-br from-blue-500 to-indigo-700" />
+                  <div className="flex flex-1 flex-col p-6">
                     <div className="flex items-center">
-                      <div className="flex items-center">
-                        {[0, 1, 2, 3, 4].map((rating) => (
-                          <svg 
-                            key={rating} 
-                            className={`h-4 w-4 ${rating < Math.floor(course.rating) ? 'text-yellow-400' : 'text-gray-300'}`} 
-                            xmlns="http://www.w3.org/2000/svg" 
-                            viewBox="0 0 20 20" 
-                            fill="currentColor"
-                          >
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                          </svg>
-                        ))}
+                      <div className="flex-shrink-0">
+                        <div className="bg-gray-200 border-2 border-dashed rounded-xl w-10 h-10" />
                       </div>
-                      <span className="ml-2 text-sm text-slate-500">({course.reviews})</span>
+                      <div className="ml-3">
+                        <p className="text-sm font-medium text-slate-900">{course.instructor}</p>
+                        <p className="text-sm text-slate-500">{course.instructorTitle}</p>
+                      </div>
                     </div>
-                    {course.bestseller && (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 ml-4">
-                        Bestseller
-                      </span>
-                    )}
-                  </div>
-                  <div className="mt-6 flex items-center justify-between">
-                    <span className="text-2xl font-bold text-slate-900">${course.price}</span>
-                    <button 
-                      onClick={() => handleAddToCart(course)}
-                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700"
-                    >
-                      <ShoppingCartIcon className="h-4 w-4 mr-2" />
-                      Add to Cart
-                    </button>
+                    <h3 className="mt-4 text-lg font-semibold text-slate-900">{course.title}</h3>
+                    <p className="mt-2 text-sm text-slate-600 line-clamp-2">{course.description}</p>
+                    <div className="mt-4 flex items-center">
+                      <div className="flex items-center">
+                        <div className="flex items-center">
+                          {[0, 1, 2, 3, 4].map((rating) => (
+                            <svg 
+                              key={rating} 
+                              className={`h-4 w-4 ${rating < Math.floor(course.rating) ? 'text-yellow-400' : 'text-gray-300'}`} 
+                              xmlns="http://www.w3.org/2000/svg" 
+                              viewBox="0 0 20 20" 
+                              fill="currentColor"
+                            >
+                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                          ))}
+                        </div>
+                        <span className="ml-2 text-sm text-slate-500">({course.reviews})</span>
+                      </div>
+                      {course.bestseller && (
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 ml-4">
+                          Bestseller
+                        </span>
+                      )}
+                    </div>
+                    <div className="mt-6 flex items-center justify-between">
+                      <span className="text-2xl font-bold text-slate-900">${course.price}</span>
+                      <button 
+                        onClick={() => handleAddToCart(course)}
+                        disabled={inCart}
+                        className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white transition-all duration-300 transform hover:scale-105 ${
+                          inCart 
+                            ? 'bg-green-500 cursor-default' 
+                            : 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
+                        }`}
+                      >
+                        {inCart ? (
+                          <>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                            Added
+                          </>
+                        ) : (
+                          <>
+                            <ShoppingCartIcon className="h-4 w-4 mr-2" />
+                            Add to Cart
+                          </>
+                        )}
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
       </Container>

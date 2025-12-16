@@ -14,6 +14,8 @@ import { Container } from '@/app/components/Container'
 import { Logo } from '@/app/components/Logo'
 import { NavLink } from '@/app/components/NavLink'
 import { ShoppingCart } from '@/app/components/ShoppingCart'
+import { useCartStore } from '@/app/store/cart-store'
+import { ShoppingCart as ShoppingCartIcon } from 'lucide-react'
 
 function MobileNavLink({
   href,
@@ -60,35 +62,41 @@ function MobileNavigation() {
   return (
     <Popover>
       <PopoverButton
-        className="relative z-10 flex h-8 w-8 items-center justify-center focus:not-data-focus:outline-hidden"
+        className="relative z-10 flex h-8 w-8 items-center justify-center ui-not-focus-visible:outline-none"
         aria-label="Toggle Navigation"
       >
         {({ open }) => <MobileNavIcon open={open} />}
       </PopoverButton>
       <PopoverBackdrop
         transition
-        className="fixed inset-0 bg-slate-300/50 duration-150 data-closed:opacity-0 data-enter:ease-out data-leave:ease-in"
+        className="fixed inset-0 bg-slate-300/50 backdrop-blur-sm duration-150 data-[closed]:opacity-0 data-[enter]:ease-out data-[leave]:ease-in"
       />
       <PopoverPanel
         transition
-        className="absolute inset-x-0 top-full mt-4 flex origin-top flex-col rounded-2xl bg-white p-4 text-lg tracking-tight text-slate-900 shadow-xl ring-1 ring-slate-900/5 data-closed:scale-95 data-closed:opacity-0 data-enter:duration-150 data-enter:ease-out data-leave:duration-100 data-leave:ease-in"
+        anchor="bottom end"
+        className="relative z-10 mt-4 w-screen max-w-xs overflow-hidden rounded-3xl bg-white p-6 shadow-xl duration-200 data-[closed]:-translate-y-2 data-[closed]:opacity-0 data-[enter]:ease-out data-[leave]:ease-in"
       >
-        <MobileNavLink href="#features">Features</MobileNavLink>
-        <MobileNavLink href="#courses">Courses</MobileNavLink>
-        <MobileNavLink href="#testimonials">Testimonials</MobileNavLink>
-        <MobileNavLink href="#pricing">Pricing</MobileNavLink>
-        <hr className="m-2 border-slate-300/40" />
-        <MobileNavLink href="/login">Sign in</MobileNavLink>
+        <div className="space-y-2">
+          <MobileNavLink href="#features">Features</MobileNavLink>
+          <MobileNavLink href="#courses">Courses</MobileNavLink>
+          <MobileNavLink href="#testimonials">Testimonials</MobileNavLink>
+          <MobileNavLink href="#pricing">Pricing</MobileNavLink>
+        </div>
+        <div className="mt-4 space-y-2">
+          <MobileNavLink href="/login">Sign in</MobileNavLink>
+        </div>
       </PopoverPanel>
     </Popover>
   )
 }
 
 export function Header() {
+  const { cartCount, openCart } = useCartStore()
+
   return (
-    <header className="py-10">
+    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200/50">
       <Container>
-        <nav className="relative z-50 flex justify-between">
+        <nav className="relative z-50 flex justify-between py-4">
           <div className="flex items-center md:gap-x-12">
             <Link href="#" aria-label="Home">
               <Logo className="h-10 w-auto" />
@@ -104,9 +112,17 @@ export function Header() {
             <div className="hidden md:block">
               <NavLink href="/login">Sign in</NavLink>
             </div>
-            <div className="hidden md:block">
-              <ShoppingCart />
-            </div>
+            <button 
+              onClick={openCart}
+              className="relative p-2 rounded-full hover:bg-slate-100 transition-all duration-200 cursor-pointer"
+            >
+              <ShoppingCartIcon className="h-6 w-6 text-slate-700" />
+              {cartCount() > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {cartCount()}
+                </span>
+              )}
+            </button>
             <Button href="/register" color="blue">
               <span>
                 Get started <span className="hidden lg:inline">today</span>
@@ -118,6 +134,7 @@ export function Header() {
           </div>
         </nav>
       </Container>
+      <ShoppingCart />
     </header>
   )
 }

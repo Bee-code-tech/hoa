@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { Logo } from '@/app/components/Logo'
-import { LoginForm } from '@/components/login-form'
 
-export default function LoginPage() {
+export default function ForgotPasswordPage() {
+  const [emailSent, setEmailSent] = useState(false)
   const [currentImage, setCurrentImage] = useState(0)
   
   // Using the same images from the hero section
@@ -22,6 +22,12 @@ export default function LoginPage() {
     
     return () => clearInterval(interval)
   }, [images.length])
+  
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    // In a real app, this would send a password reset email
+    setEmailSent(true)
+  }
 
   return (
     <div className="grid min-h-svh lg:grid-cols-2 bg-brand-primary/90">
@@ -31,12 +37,77 @@ export default function LoginPage() {
             <Logo className="h-10 w-auto" />
           </a>
         </div>
+        
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
-            <LoginForm />
+            {emailSent ? (
+              <div className="text-center">
+                <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-brand-accent/20">
+                  <svg className="h-6 w-6 text-brand-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <h2 className="mt-4 text-2xl font-bold text-brand-light">Check your email</h2>
+                <p className="mt-2 text-brand-light/80">
+                  We've sent a password reset link to your email address.
+                </p>
+                <div className="mt-6">
+                  <a
+                    href="/login"
+                    className="text-brand-accent font-medium hover:text-brand-accent/80"
+                  >
+                    Back to login
+                  </a>
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-6">
+                <div className="flex flex-col items-center gap-1 text-center">
+                  <h1 className="text-2xl font-bold text-brand-light">Forgot password?</h1>
+                  <p className="text-brand-light/80 text-sm text-balance">
+                    No worries, we'll send you reset instructions.
+                  </p>
+                </div>
+                
+                <form className="space-y-6" onSubmit={handleSubmit}>
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-brand-light mb-1">
+                      Email Address
+                    </label>
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      required
+                      className="w-full px-3 py-2 border border-brand-accent/30 rounded-md focus:border-brand-accent focus:ring-brand-accent focus:outline-none bg-brand-secondary/20 text-brand-light placeholder-brand-light/70"
+                    />
+                  </div>
+                  
+                  <div>
+                    <button
+                      type="submit"
+                      className="w-full bg-brand-accent hover:bg-brand-accent/90 text-brand-secondary py-2 px-4 rounded-md transition-colors duration-200"
+                    >
+                      Reset password
+                    </button>
+                  </div>
+                </form>
+                
+                <div className="text-center">
+                  <a
+                    href="/login"
+                    className="text-brand-accent font-medium hover:text-brand-accent/80"
+                  >
+                    ← Back to login
+                  </a>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
+      
       <div className="relative hidden lg:block overflow-hidden">
         {/* Gold grid pattern overlay */}
         <svg
@@ -47,7 +118,7 @@ export default function LoginPage() {
             <pattern
               x="50%"
               y={-1}
-              id="login-grid-pattern"
+              id="forgot-password-grid-pattern"
               width={200}
               height={200}
               patternUnits="userSpaceOnUse"
@@ -61,7 +132,7 @@ export default function LoginPage() {
               strokeWidth={0}
             />
           </svg>
-          <rect fill="url(#login-grid-pattern)" width="100%" height="100%" strokeWidth={0} />
+          <rect fill="url(#forgot-password-grid-pattern)" width="100%" height="100%" strokeWidth={0} />
         </svg>
         
         {/* Carousel images */}

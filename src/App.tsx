@@ -112,14 +112,14 @@ function BusinessSection() {
 
         {/* Text Column */}
         <div className="order-2 lg:order-1">
-          <h2 className="text-3xl font-bold">Upskill your team with Hurak</h2>
+          <h2 className="text-3xl font-bold">Upskill your team with HOA</h2>
           <ul className="mt-4 text-gray-600 text-xl space-y-2">
             <li>• Save time and hassle by managing all your customer data in one place</li>
             <li>• Spend less time worrying about managing your team and more time growing your business.</li>
             <li>• It's free! You can use it as much or as little as you want.</li>
           </ul>
           <button className="mt-6 bg-blue-900 text-lg text-white px-6 py-3 rounded-md">
-            Get Hurak Business
+            Get HOA Business
           </button>
         </div>
 
@@ -142,8 +142,8 @@ function TeachSection() {
           src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f"
         /> <div>
           
-          <h2 className="text-3xl font-bold">Teach with Hurak</h2>
-         <div className="text-gray-700 text-xl p-2">Join Hurak and list your courses for Free! Whether you’re an instructor or company, we provide the tools and skill for you to teach with no hassle.</div>
+          <h2 className="text-3xl font-bold">Teach with HOA</h2>
+         <div className="text-gray-700 text-xl p-2">Join HOA and list your courses for Free! Whether you’re an instructor or company, we provide the tools and skill for you to teach with no hassle.</div>
           <button className="mt-6 bg-blue-900 text-lg text-white px-6 py-3 rounded-md">
             Start Teaching Today
           </button>

@@ -2,7 +2,7 @@ import { ShoppingCart, Search, Menu } from "lucide-react";
 
 function Header() {
   return (
-    <header className="bg-white border-b sticky top-0 z-50">
+    <header className="bg-blue-300 border-b sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
 
         {/* ---------- MOBILE LEFT (Hamburger) ---------- */}
@@ -15,7 +15,7 @@ function Header() {
           <img
             src="/image.png"
             alt="Logo"
-            className="w-24 h-auto bg-gray-400"
+            className="w-24 h-auto "
           />
         </div>
 
@@ -34,7 +34,7 @@ function Header() {
             <input
               type="text"
               placeholder="Search for courses or training providers"
-              className="pl-9 pr-3 py-2 w-64 rounded-full border text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="pl-9 pr-3 py-2 w-64 rounded-full border text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
             />
           </div>
 

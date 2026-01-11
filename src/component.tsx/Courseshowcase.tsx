@@ -86,7 +86,7 @@ export default function CourseShowcase() {
     <section className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4">
         <h2 className="text-2xl font-bold mb-1">
-          Hurak – Training Courses & Qualifications
+          HOA – Training Courses & Qualifications
         </h2>
         <p className="text-gray-600 mb-6 text-lg">
           With over 100,000 customers, from individuals to global brands.

@@ -32,7 +32,7 @@ function Footer() {
             <MapPin className="w-5 h-5 text-blue-900 mt-1 " />
             <div>
               <h4 className="font-semibold mb-1 text-xl text-blue-900">Head Office</h4>
-              <p>123 Hurak Street, London, UK</p>
+              <p>123 HOA Street, London, UK</p>
             </div>
           </div>
 
@@ -154,7 +154,7 @@ function Footer() {
 
       {/* Footer bottom */}
       <div className="mt-12 text-center text-gray-500 text-sm">
-        © Hurak 2026. All rights reserved.
+        © HOA 2026. All rights reserved.
       </div>
     </footer>
   );

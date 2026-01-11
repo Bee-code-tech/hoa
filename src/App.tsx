@@ -36,7 +36,7 @@ function Hero() {
         {/* Desktop layout: text overlayed on image */}
         <div className="relative hidden lg:block">
           <img
-            className="w-full h-[500px] object-cover rounded-2xl"
+            className="w-full h-125 object-cover rounded-2xl"
             src="https://hurak-training-uploads.s3.eu-west-2.amazonaws.com/uploads/admin-cms/homepage-uploads/68713ebe61021_banner.webp"
             alt="Student"
           />

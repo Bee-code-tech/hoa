@@ -17,7 +17,7 @@ function SupportSection() {
 
         <div className="grid md:grid-cols-3 gap-6">
           {supportOptions.map((option) => (
-            <div key={option.label} className="border rounded-xl p-6 bg-white flex flex-col items-center">
+            <div key={option.label} className="border rounded-xl p-6 bg-white flex flex-col items-center text-blue-900">
               {option.icon}
               <p className="font-medium">{option.label}</p>
             </div>

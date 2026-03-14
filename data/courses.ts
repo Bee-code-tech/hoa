@@ -1,4 +1,5 @@
 import courseDoor from "@/assets/course-door.jpg";
+import courseSupervisor from "@/assets/course-supervisor.jpg";
 import courseCctv from "@/assets/course-cctv.jpg";
 import courseFirstaid from "@/assets/course-firstaid.jpg";
 import courseCloseprotection from "@/assets/course-closeprotection.jpg";
@@ -14,6 +15,35 @@ export const courses = [
     students: "3,200+",
     price: "£0",
     image: courseDoor,
+    badge: "Most Popular",
+    description: "The SIA Door Supervisor course is the standard requirement for anyone looking to work as a security guard or door supervisor in the UK. This comprehensive training covers everything from behavioral standards to emergency procedures.",
+    syllabus: [
+      { title: "Unit 1: Working in the Private Security Industry", content: "Understanding the legal aspects, health and safety, and communication skills required for the role." },
+      { title: "Unit 2: Working as a Door Supervisor", content: "Behavioral standards, access control, and search procedures." },
+      { title: "Unit 3: Conflict Management", content: "Recognizing and defusing potentially violent situations safely." },
+      { title: "Unit 4: Physical Intervention", content: "Escorting and restrictive positioning skills as a last resort." }
+    ],
+    requirements: [
+      "Must be 18+ years of age",
+      "Valid identity documents",
+      "Level 1 English qualification",
+      "Emergency First Aid at Work certificate"
+    ],
+    includes: [
+      "SIA Accredited Certification",
+      "Comprehensive Study Materials",
+      "Physical Intervention Training",
+      "Job Placement Support"
+    ]
+  },
+  {
+    slug: "sia-door-supervisor",
+    title: "SIA Door Supervisor Refresher Course",
+    category: "Security",
+    duration: "6 Days",
+    students: "3,200+",
+    price: "£0",
+    image: courseSupervisor,
     badge: "Most Popular",
     description: "The SIA Door Supervisor course is the standard requirement for anyone looking to work as a security guard or door supervisor in the UK. This comprehensive training covers everything from behavioral standards to emergency procedures.",
     syllabus: [

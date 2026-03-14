@@ -1,7 +1,7 @@
 "use client"
 
 import { SignupForm } from "@/components/signup-form"
-import logo from "@/assets/logo.png"
+import logo from "@/assets/logo-dark.png"
 import Link from "next/link"
 
 export default function SignupPage() {

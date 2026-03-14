@@ -12,6 +12,24 @@ import { ArrowLeft, Clock, Users, CheckCircle, BookOpen, ShieldCheck, ArrowRight
 import CourseCard from "@/components/CourseCard";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Metadata } from "next";
+
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const params = await props.params;
+  const course = courses.find((c) => c.slug === params.slug);
+  
+  if (!course) return { title: "Course Not Found" };
+
+  return {
+    title: course.title,
+    description: course.description.slice(0, 160),
+    openGraph: {
+      title: `${course.title} | House of Abundance`,
+      description: course.description.slice(0, 160),
+      images: [{ url: (course.image as any).src || course.image }],
+    },
+  };
+}
 
 export default async function CourseDetailPage(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;

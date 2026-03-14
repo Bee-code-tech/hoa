@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import heroImage from "@/assets/hero-security.jpg";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import Link from "next/link";
 
 const highlights = [
   "SIA Accredited Courses",
@@ -88,9 +89,11 @@ const HeroSection = () => {
 
             <div className="flex flex-wrap justify-center md:justify-start gap-3">
               <div className="hero-button">
-                <Button size="lg" className="gap-2 bg-gold px-8 text-foreground hover:bg-gold-light">
-                  Browse Courses <ArrowRight className="h-4 w-4" />
-                </Button>
+                <Link href="/login">
+                  <Button size="lg" className="gap-2 bg-gold px-8 text-foreground hover:bg-gold-light">
+                    Get Started <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </Link>
               </div>
               <div className="hero-button">
                 <Button size="lg" variant="outline" className="gap-2 border-hero-muted/30 text-hero-foreground hover:bg-primary/10">

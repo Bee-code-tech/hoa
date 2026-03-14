@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Link from "next/link";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -52,9 +53,11 @@ const CTASection = () => {
         </p>
         <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
           <div className="cta-button">
-            <Button size="lg" className="gap-2 bg-gold px-8 text-foreground hover:bg-gold-light">
-              Browse All Courses <ArrowRight className="h-4 w-4" />
-            </Button>
+            <Link href="/login">
+              <Button size="lg" className="gap-2 bg-gold px-8 text-foreground hover:bg-gold-light">
+                Get Started Now <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
           </div>
           <div className="cta-button">
             <Button size="lg" variant="outline" className="border-hero-muted/30 text-hero-foreground hover:bg-primary/10">

@@ -19,7 +19,7 @@ import { LayoutDashboardIcon, ListIcon, ChartBarIcon, FolderIcon, UsersIcon, Cam
 
 const data = {
   user: {
-    name: "shadcn",
+    name: "shadcn", //comment
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },

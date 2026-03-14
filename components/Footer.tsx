@@ -17,8 +17,7 @@ const Footer = () => {
           </div>
           {[
             { title: "Courses", links: ["Door Supervisor", "CCTV Operator", "First Aid", "Close Protection"] },
-            { title: "Company", links: ["About Us", "Locations", "Blog", "Careers"] },
-            { title: "Support", links: ["Contact", "FAQ", "Terms", "Privacy"] },
+            { title: "Company", links: ["About Us", "Locations", "Blog", "Careers", "Terms", "Privacy"] },
           ].map((col) => (
             <div key={col.title}>
               <h4 className="mb-3 text-sm font-semibold text-foreground">{col.title}</h4>
@@ -31,6 +30,25 @@ const Footer = () => {
               </ul>
             </div>
           ))}
+          <div>
+            <h4 className="mb-3 text-sm font-semibold text-foreground">Contact Us</h4>
+            <div className="space-y-3 text-sm text-muted-foreground">
+              <p className="flex flex-col">
+                <span className="font-medium text-foreground">Phone</span>
+                <a href="tel:+447776727184" className="hover:text-gold transition-colors">+44 7776 727184</a>
+              </p>
+              <p className="flex flex-col">
+                <span className="font-medium text-foreground">Email</span>
+                <a href="mailto:hoalearning@hoaservices.co.uk" className="hover:text-gold transition-colors">hoalearning@hoaservices.co.uk</a>
+              </p>
+              <p className="flex flex-col">
+                <span className="font-medium text-foreground">Address</span>
+                <span>Union Building</span>
+                <span>111 New Union Street</span>
+                <span>Coventry, CV1 2NT</span>
+              </p>
+            </div>
+          </div>
         </div>
         <div className="mt-10 border-t pt-6 text-center text-xs text-muted-foreground">
           © {new Date().getFullYear()} HOA Services — House of Abundance. All rights reserved.

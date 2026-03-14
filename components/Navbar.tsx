@@ -13,7 +13,7 @@ const navLinks = [
   { label: "Courses", icon: BookOpen, href: "#courses" },
   { label: "Locations", icon: MapPin, href: "#locations" },
   { label: "Blog", icon: FileText, href: "#blog" },
-  { label: "Contact", icon: Phone, href: "#contact" },
+  { label: "Contact", icon: Phone, href: "/contact" },
 ];
 
 const Navbar = () => {

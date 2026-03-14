@@ -1,4 +1,5 @@
 import logo from "@/assets/logo-icon.png";
+import Link from "next/link";
 
 const Footer = () => {
   return (
@@ -31,7 +32,9 @@ const Footer = () => {
             </div>
           ))}
           <div>
-            <h4 className="mb-3 text-sm font-semibold text-foreground">Contact Us</h4>
+            <Link href="/contact" className="hover:opacity-80 transition-opacity">
+              <h4 className="mb-3 text-sm font-semibold text-foreground">Contact Us</h4>
+            </Link>
             <div className="space-y-3 text-sm text-muted-foreground">
               <p className="flex flex-col">
                 <span className="font-medium text-foreground">Phone</span>

@@ -12,7 +12,7 @@ export const courses = [
     category: "Security",
     duration: "6 Days",
     students: "3,200+",
-    price: "£220",
+    price: "£0",
     image: courseDoor,
     badge: "Most Popular",
     description: "The SIA Door Supervisor course is the standard requirement for anyone looking to work as a security guard or door supervisor in the UK. This comprehensive training covers everything from behavioral standards to emergency procedures.",
@@ -41,7 +41,7 @@ export const courses = [
     category: "Surveillance",
     duration: "3 Days",
     students: "1,850+",
-    price: "£180",
+    price: "£0",
     image: courseCctv,
     description: "Launch your career in surveillance with our SIA-accredited CCTV Operator course. Learn to monitor public spaces and private property using the latest technology.",
     syllabus: [
@@ -64,7 +64,7 @@ export const courses = [
     category: "First Aid",
     duration: "1 Day",
     students: "5,100+",
-    price: "£90",
+    price: "£0",
     image: courseFirstaid,
     badge: "Best Value",
     description: "Essential life-saving skills for any workplace. This one-day course is a prerequisite for many SIA licenses and is highly valued by employers.",
@@ -85,7 +85,7 @@ export const courses = [
     category: "Security",
     duration: "15 Days",
     students: "720+",
-    price: "£1,500",
+    price: "£0",
     image: courseCloseprotection,
     description: "Elite level training for high-threat environments. Become an executive protection specialist with our intensive 15-day residential program.",
     syllabus: [
@@ -108,7 +108,7 @@ export const courses = [
     category: "Top-Up",
     duration: "2 Days",
     students: "2,400+",
-    price: "£120",
+    price: "£0",
     image: courseGuard,
     description: "Required 'Top-Up' training for existing license holders to ensure compliance with the latest industry standards.",
     syllabus: [
@@ -124,7 +124,7 @@ export const courses = [
     category: "Security",
     duration: "1 Day",
     students: "1,600+",
-    price: "£95",
+    price: "£0",
     image: courseConflict,
     description: "Specialized training in verbal de-escalation and risk management. Essential for front-line security and hospitality staff.",
     syllabus: [

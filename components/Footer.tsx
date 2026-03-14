@@ -1,4 +1,4 @@
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo-icon.png";
 
 const Footer = () => {
   return (
@@ -9,8 +9,8 @@ const Footer = () => {
             <div className="mb-4 flex items-center gap-2.5">
               <img src={logo.src} alt="HOA Services" className="h-8 w-auto" />
               <div className="flex flex-col leading-none">
-                <span className="text-sm font-bold text-primary">HOA Services</span>
-                <span className="text-[9px] font-medium tracking-wider text-muted-foreground">HOUSE OF ABUNDANCE</span>
+                <span className="text-sm font-bold text-primary">House of Abundance</span>
+                <span className="text-[9px] font-medium tracking-wider text-muted-foreground">SERVICES LIMITED</span>
               </div>
             </div>
             <p className="text-sm text-muted-foreground">Professional security training courses across the UK. Your career starts here.</p>

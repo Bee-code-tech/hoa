@@ -91,7 +91,7 @@ export default async function Image() {
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={logoData as any}
+              src={logoData as unknown as string}
               alt="HOA Logo"
               style={{
                 height: "120px",

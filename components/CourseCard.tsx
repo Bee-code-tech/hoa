@@ -9,7 +9,7 @@ interface CourseCardProps {
   duration: string;
   students: string;
   price: string;
-  image: any;
+  image: string | { src: string };
   badge?: string;
 }
 
@@ -17,7 +17,7 @@ const CourseCard = ({ slug, title, category, duration, students, price, image, b
   return (
     <Link href={`/courses/${slug}`} className="group relative block overflow-hidden rounded-xl border bg-card transition-all hover:shadow-lg hover:-translate-y-1">
       <div className="relative h-64 overflow-hidden">
-        <img src={image?.src || image} alt={title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+        <img src={typeof image === "string" ? image : image.src} alt={title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
         {badge && (
           <span className="absolute left-3 top-3 rounded-md bg-gold px-2.5 py-1 text-xs font-semibold text-primary-foreground">
             {badge}

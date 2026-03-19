@@ -8,11 +8,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { ArrowLeft, Clock, Users, CheckCircle, BookOpen, ShieldCheck, ArrowRight, Play } from "lucide-react";
+import { ArrowLeft, Clock, Users, CheckCircle, BookOpen, ShieldCheck, ArrowRight } from "lucide-react";
 import CourseCard from "@/components/CourseCard";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+
+type CourseImage = string | { src: string };
 
 export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const params = await props.params;
@@ -20,13 +22,15 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
   
   if (!course) return { title: "Course Not Found" };
 
+  const imageSrc = typeof course.image === "string" ? course.image : (course.image as { src: string }).src;
+
   return {
     title: course.title,
     description: course.description.slice(0, 160),
     openGraph: {
       title: `${course.title} | House of Abundance`,
       description: course.description.slice(0, 160),
-      images: [{ url: (course.image as any).src || course.image }],
+      images: [{ url: imageSrc }],
     },
   };
 }
@@ -80,7 +84,7 @@ export default async function CourseDetailPage(props: { params: Promise<{ slug: 
             <div className="lg:col-span-2">
               {/* Course image */}
               <div className="mb-8 overflow-hidden rounded-xl border">
-                <img src={(course.image as any).src || course.image} alt={course.title} className="h-72 w-full object-cover md:h-96" />
+                <img src={typeof course.image === "string" ? course.image : (course.image as { src: string }).src} alt={course.title} className="h-72 w-full object-cover md:h-96" />
               </div>
 
               {/* Description */}

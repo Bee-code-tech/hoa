@@ -21,11 +21,13 @@ const Navbar = () => {
   const navRef = useRef<HTMLElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const timeline = useRef<any>(null);
+  const timeline = useRef<gsap.core.Timeline | null>(null);
 
   useGSAP(() => {
     // Initial state: menu is zero height and invisible
-    gsap.set(menuRef.current, { height: 0, opacity: 0, overflow: "hidden", display: "none" });
+    if (menuRef.current) {
+      gsap.set(menuRef.current, { height: 0, opacity: 0, overflow: "hidden", display: "none" });
+    }
 
     timeline.current = gsap.timeline({ paused: true })
       .to(navRef.current, {
@@ -66,13 +68,13 @@ const Navbar = () => {
         className="w-full max-w-5xl rounded-full border border-border/60 bg-white px-5 py-2.5 shadow-lg overflow-hidden"
       >
         <div className="flex items-center justify-between">
-          <a href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2">
             <img src={logo.src} alt="HOA Services" className="h-9 w-auto" />
             <div className="flex flex-col leading-none">
               <span className="text-base font-bold tracking-tight text-navy">HOA</span>
               <span className="text-[9px] font-medium tracking-widest uppercase text-gold">Learning</span>
             </div>
-          </a>
+          </Link>
 
           <div className="hidden items-center gap-1 md:flex">
             {navLinks.map((link) => (

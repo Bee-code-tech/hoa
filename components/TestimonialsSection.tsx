@@ -76,7 +76,7 @@ const TestimonialsSection = () => {
                   <Star key={i} className="h-4 w-4 fill-gold text-gold" />
                 ))}
               </div>
-              <p className="mb-5 text-sm leading-relaxed text-muted-foreground">"{t.quote}"</p>
+              <p className="mb-5 text-sm leading-relaxed text-muted-foreground">&quot;{t.quote}&quot;</p>
               <div>
                 <p className="text-sm font-semibold text-foreground">{t.name}</p>
                 <p className="text-xs text-muted-foreground">{t.role}</p>

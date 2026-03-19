@@ -1,9 +1,12 @@
 import { AppSidebar } from "@/components/app-sidebar"
-import { ChartAreaInteractive } from "@/components/chart-area-interactive"
-import { DataTable } from "@/components/data-table"
-import { SectionCards } from "@/components/section-cards"
 import { SiteHeader } from "@/components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+
+import { SectionCards } from "./_components/section-cards"
+import { ChartAreaDefault } from "./_components/chart-area-default"
+import { CourseDistributionChart } from "./_components/course-distribution-chart"
+import { DataTable } from "./_components/data-table"
+import { RecentActivities } from "./_components/recent-activities"
 
 import data from "./data.json"
 
@@ -24,10 +27,22 @@ export default function Page() {
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <SectionCards />
-              <div className="px-4 lg:px-6">
-                <ChartAreaInteractive />
+              <div className="grid grid-cols-1 gap-4 px-4 lg:grid-cols-3 lg:px-6">
+                <div className="lg:col-span-2">
+                  <ChartAreaDefault />
+                </div>
+                <div className="lg:col-span-1">
+                  <CourseDistributionChart />
+                </div>
               </div>
-              <DataTable data={data} />
+              <div className="grid grid-cols-1 gap-4 px-4 lg:grid-cols-12 lg:px-6">
+                <div className="lg:col-span-8">
+                  <DataTable data={data} />
+                </div>
+                <div className="lg:col-span-4">
+                  <RecentActivities />
+                </div>
+              </div>
             </div>
           </div>
         </div>

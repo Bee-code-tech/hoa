@@ -34,7 +34,15 @@ export function LoginForm({
 
     if (password === "password@123") {
       const role = email === "admin@hoaservices.co.uk" ? "admin" : "student"
-      const user = { email, role }
+      const name = email.split("@")[0].split(".")[0]
+      const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1)
+      
+      const user = { 
+        email, 
+        role, 
+        name: capitalizedName,
+        avatar: `https://ui-avatars.com/api/?name=${capitalizedName}&background=002147&color=fff`
+      }
       localStorage.setItem("user", JSON.stringify(user))
       router.push("/dashboard")
     } else {

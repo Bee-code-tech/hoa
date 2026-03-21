@@ -7,18 +7,19 @@ import { SidebarMenu, SidebarTrigger } from "@/components/ui/sidebar"
 
 export function SiteHeader() {
   const [user, setUser] = useState({
-    name: "Admin",
-    email: "admin@hoaservices.co.uk",
-    avatar: "https://ui-avatars.com/api/?name=Admin&background=002147&color=fff",
+    name: "User",
+    email: "",
+    avatar: "",
   })
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user") || "{}")
-    if (storedUser.name) {
+    if (storedUser.role) {
+      const fallbackName = storedUser.role.charAt(0).toUpperCase() + storedUser.role.slice(1)
       setUser({
-        name: storedUser.name,
-        email: storedUser.email || (storedUser.role === "student" ? "student@hoaservices.co.uk" : "admin@hoaservices.co.uk"),
-        avatar: storedUser.avatar || `https://ui-avatars.com/api/?name=${storedUser.name}&background=002147&color=fff`,
+        name: storedUser.name || fallbackName,
+        email: storedUser.email || `${storedUser.role}@hoaservices.co.uk`,
+        avatar: storedUser.avatar || `https://ui-avatars.com/api/?name=${storedUser.name || fallbackName}&background=002147&color=fff`,
       })
     }
   }, [])

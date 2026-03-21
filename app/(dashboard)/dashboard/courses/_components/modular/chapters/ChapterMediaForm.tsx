@@ -1,15 +1,14 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Pencil, X, Video, PlayCircle, FileText, Upload, CheckCircle, Loader2 } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { Pencil, X, Video, FileText, Upload, CheckCircle, Loader2 } from "lucide-react"
 
 interface ChapterMediaFormProps {
   initialData: {
     videoUrl?: string
     content?: string
-    type: "video" | "pdf"
+    type?: "video" | "pdf"
   }
   onSave: (url: string) => void
 }
@@ -17,117 +16,114 @@ interface ChapterMediaFormProps {
 export default function ChapterMediaForm({ initialData, onSave }: ChapterMediaFormProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
-  const [previewUrl, setPreviewUrl] = useState(initialData.videoUrl || initialData.content || "")
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  const isVideo = initialData.type === "video"
 
   const toggleEdit = () => setIsEditing((current) => !current)
 
-  const onFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
 
     setIsUploading(true)
-    
     // Simulate upload
     setTimeout(() => {
-      const simulatedUrl = URL.createObjectURL(file)
-      setPreviewUrl(simulatedUrl)
-      onSave(simulatedUrl)
+      const fakeUrl = isVideo 
+        ? "https://www.w3schools.com/html/mov_bbb.mp4" 
+        : "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+      onSave(fakeUrl)
       setIsUploading(false)
       setIsEditing(false)
-    }, 1500)
+    }, 2000)
   }
 
-  const isVideo = initialData.type === "video"
   const currentUrl = initialData.videoUrl || initialData.content
 
   return (
     <div className="mt-6 border bg-primary/5 rounded-2xl p-6">
       <div className="font-semibold flex items-center justify-between">
         Module {isVideo ? "Video" : "PDF Content"}
-        <Button onClick={toggleEdit} variant="ghost" size="sm" className="gap-2">
+        <Button onClick={toggleEdit} variant="ghost" size="sm" className="gap-2 hover:bg-primary/10 hover:text-primary">
           {isEditing ? (
             <><X className="size-4" /> Cancel</>
           ) : (
-            <><Pencil className="size-4" /> Change {isVideo ? "video" : "PDF"}</>
+            <><Pencil className="size-4" /> Edit content</>
           )}
         </Button>
       </div>
 
       {!isEditing && (
-        !currentUrl ? (
-          <div className="flex flex-col items-center justify-center h-60 bg-muted rounded-xl mt-4 border-2 border-dashed gap-y-2">
-            {isVideo ? <Video className="size-10 text-muted-foreground" /> : <FileText className="size-10 text-muted-foreground" />}
-            <p className="text-sm text-muted-foreground">No {isVideo ? "video" : "PDF"} uploaded yet</p>
-          </div>
-        ) : (
-          <div className="mt-4">
-            {isVideo ? (
-               <div className="relative aspect-video overflow-hidden rounded-xl border-2 border-primary/20 bg-black group shadow-xl">
-                 <video
-                    src={currentUrl}
-                    className="w-full h-full"
-                    controls
-                 />
-                 <div className="absolute top-2 right-2 bg-green-500 text-white text-[10px] px-2 py-1 rounded-full font-bold flex items-center gap-1 shadow-lg">
-                    <CheckCircle className="size-3" /> UPLOADED
-                 </div>
+        <div className="mt-4">
+          {!currentUrl ? (
+            <div className="flex flex-col items-center justify-center h-40 bg-background/50 rounded-xl border-2 border-dashed border-primary/20 p-4">
+              <Upload className="size-8 text-primary/40 mb-2" />
+              <p className="text-sm text-muted-foreground italic">No file uploaded yet</p>
+            </div>
+          ) : isVideo ? (
+            <div className="relative aspect-video rounded-xl overflow-hidden bg-black border shadow-sm">
+              <video 
+                src={currentUrl} 
+                controls 
+                className="w-full h-full"
+              />
+            </div>
+          ) : (
+            <div className="flex items-center gap-3 p-4 bg-background border rounded-xl shadow-sm hover:border-primary/50 transition-colors">
+              <div className="bg-primary/10 p-2 rounded-lg">
+                <FileText className="size-5 text-primary" />
               </div>
-            ) : (
-              <div className="p-8 border-2 border-dashed border-primary/20 rounded-xl bg-white/50 flex flex-col items-center justify-center gap-4 group hover:bg-primary/5 transition-colors">
-                 <div className="bg-primary/10 p-4 rounded-2xl group-hover:scale-110 transition-transform">
-                    <FileText className="size-8 text-primary" />
-                 </div>
-                 <div className="text-center">
-                    <p className="font-bold text-sm">PDF Document Linked</p>
-                    <p className="text-xs text-muted-foreground">The resource is ready for student viewing</p>
-                 </div>
-                 <Button variant="outline" size="sm" className="gap-2" asChild>
-                    <a href={currentUrl} target="_blank" rel="noopener noreferrer">
-                       View PDF Preview
-                    </a>
-                 </Button>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium truncate">Uploaded PDF Document</p>
+                <a 
+                  href={currentUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-xs text-primary hover:underline"
+                >
+                  View full document
+                </a>
               </div>
-            )}
-          </div>
-        )
+              <CheckCircle className="size-4 text-green-500" />
+            </div>
+          )}
+        </div>
       )}
 
       {isEditing && (
-        <div className="space-y-4 mt-4">
-          <div 
-            onClick={() => fileInputRef.current?.click()}
-            className={cn(
-               "flex flex-col items-center justify-center h-60 bg-card rounded-xl border-2 border-dashed border-primary/30 cursor-pointer hover:bg-primary/5 transition-all group",
-               isUploading && "pointer-events-none opacity-50"
-            )}
-          >
-             <input 
-                type="file" 
-                ref={fileInputRef} 
-                onChange={onFileUpload} 
-                accept={isVideo ? "video/*" : "application/pdf"} 
-                className="hidden" 
-             />
-             
-             {isUploading ? (
-                <div className="flex flex-col items-center gap-2">
-                   <Loader2 className="size-10 text-primary animate-spin" />
-                   <p className="text-sm font-medium">Uploading media...</p>
+        <div className="mt-4">
+          <div className="flex flex-col items-center justify-center h-60 bg-background/50 rounded-xl border-2 border-dashed border-primary/30 p-8 text-center transition-all hover:border-primary/50">
+            {isUploading ? (
+              <div className="flex flex-col items-center gap-y-4">
+                 <Loader2 className="size-10 text-primary animate-spin" />
+                 <div className="space-y-1">
+                    <p className="text-sm font-bold">Uploading your {isVideo ? 'video' : 'PDF'}...</p>
+                    <p className="text-xs text-muted-foreground">This may take a few moments</p>
+                 </div>
+              </div>
+            ) : (
+              <label className="cursor-pointer w-full h-full flex flex-col items-center justify-center gap-y-4 group">
+                <div className="bg-primary/10 p-4 rounded-full group-hover:bg-primary/20 transition-all">
+                   <Upload className="size-8 text-primary" />
                 </div>
-             ) : (
-                <div className="flex flex-col items-center gap-2">
-                   <div className="bg-primary/10 p-4 rounded-2xl group-hover:bg-primary/20 transition-colors">
-                      <Upload className="size-8 text-primary" />
-                   </div>
-                   <p className="text-sm font-bold">Click to upload {isVideo ? "video" : "PDF"}</p>
-                   <p className="text-xs text-muted-foreground text-center px-6">
-                      Drag and drop or select a file from your computer.<br/>
-                      {isVideo ? "MP4, WebM or Ogg" : "PDF documents only"}
+                <div className="space-y-1">
+                   <p className="text-sm font-bold">
+                     Click to upload {isVideo ? 'video' : 'PDF'}
+                   </p>
+                   <p className="text-xs text-muted-foreground">
+                     or drag and drop here
                    </p>
                 </div>
-             )}
+                <input 
+                  type="file" 
+                  className="hidden" 
+                  accept={isVideo ? "video/*" : ".pdf"}
+                  onChange={handleUpload}
+                />
+              </label>
+            )}
           </div>
+          <p className="text-[11px] text-muted-foreground mt-4 text-center">
+             Choose a {isVideo ? 'MP4, WebM or Ogg' : 'PDF'} file to {currentUrl ? 'replace the existing' : 'upload a new'} content.
+          </p>
         </div>
       )}
     </div>

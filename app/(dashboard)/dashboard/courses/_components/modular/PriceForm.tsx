@@ -27,7 +27,7 @@ export default function PriceForm({ initialData, onSave }: PriceFormProps) {
     <div className="mt-6 border bg-primary/5 rounded-2xl p-6">
       <div className="font-semibold flex items-center justify-between">
         Course Price
-        <Button onClick={toggleEdit} variant="ghost" size="sm" className="gap-2">
+        <Button onClick={toggleEdit} variant="ghost" size="sm" className="gap-2 hover:bg-primary/10 hover:text-primary">
           {isEditing ? (
             <><X className="size-4" /> Cancel</>
           ) : (

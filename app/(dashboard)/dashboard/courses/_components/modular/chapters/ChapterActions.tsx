@@ -34,7 +34,7 @@ export default function ChapterActions({
         disabled={disabled}
         variant="outline"
         size="sm"
-        className="font-semibold px-6"
+        className="font-semibold px-6 hover:bg-primary/10 hover:text-primary hover:border-primary/30"
       >
         {isPublished ? "Unpublish" : "Publish"}
       </Button>
@@ -53,7 +53,7 @@ export default function ChapterActions({
             </DialogDescription>
           </DialogHeader>
           <div className="flex items-center justify-end gap-x-2 pt-4">
-            <Button variant="ghost" size="sm" onClick={() => setShowDelete(false)}>
+            <Button variant="ghost" size="sm" onClick={() => setShowDelete(false)} className="hover:bg-primary/10 hover:text-primary">
               Cancel
             </Button>
             <Button variant="destructive" size="sm" onClick={onDelete}>

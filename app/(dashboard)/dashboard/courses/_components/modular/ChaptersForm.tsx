@@ -34,11 +34,11 @@ export default function ChaptersForm({
 }: ChaptersFormProps) {
   const [isCreating, setIsCreating] = useState(false)
   const [draft, setDraft] = useState("")
-  const [localChapters, setLocalChapters] = useState<Chapter[]>(initialData.chapters)
+  const [localChapters, setLocalChapters] = useState<Chapter[]>(initialData.chapters || [])
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => { setIsMounted(true) }, [])
-  useEffect(() => { setLocalChapters(initialData.chapters) }, [initialData.chapters])
+  useEffect(() => { setLocalChapters(initialData.chapters || []) }, [initialData.chapters])
 
   const toggleCreating = () => setIsCreating((current) => !current)
 
@@ -64,7 +64,7 @@ export default function ChaptersForm({
     <div className="mt-6 border bg-primary/5 rounded-2xl p-6 relative">
       <div className="font-semibold flex items-center justify-between">
         Course Curriculum
-        <Button onClick={toggleCreating} variant="ghost" size="sm" className="gap-2">
+        <Button onClick={toggleCreating} variant="ghost" size="sm" className="gap-2 hover:bg-primary/10 hover:text-primary">
           {isCreating ? (
             <><X className="size-4" /> Cancel</>
           ) : (
@@ -91,9 +91,9 @@ export default function ChaptersForm({
 
       <div className={cn(
         "mt-4 text-sm",
-        !localChapters.length && "text-muted-foreground italic bg-background/50 p-6 text-center rounded-xl border-2 border-dashed"
+        !localChapters?.length && "text-muted-foreground italic bg-background/50 p-6 text-center rounded-xl border-2 border-dashed"
       )}>
-        {!localChapters.length ? (
+        {!localChapters?.length ? (
           <p>No modules added yet. Start by creating your first module.</p>
         ) : isMounted ? (
           <DragDropContext onDragEnd={onDragEnd}>
@@ -128,7 +128,7 @@ export default function ChaptersForm({
                              <Button
                                variant="ghost"
                                size="icon"
-                               className="size-8 text-muted-foreground hover:text-primary"
+                               className="size-8 text-muted-foreground hover:bg-primary/10 hover:text-primary"
                                onClick={() => onEdit(chapter.id)}
                              >
                                <Pencil className="size-3.5" />
@@ -146,7 +146,7 @@ export default function ChaptersForm({
         ) : null}
       </div>
       
-      {!isCreating && localChapters.length > 0 && (
+      {!isCreating && (localChapters || []).length > 0 && (
         <p className="text-xs text-muted-foreground mt-4 text-center">
           Drag and drop to reorder modules
         </p>

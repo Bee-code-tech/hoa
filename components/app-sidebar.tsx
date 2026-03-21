@@ -9,7 +9,7 @@ import {
   SidebarContent,
   SidebarHeader,
 } from "@/components/ui/sidebar"
-import { LayoutDashboardIcon, UsersIcon, FileTextIcon, Settings2Icon } from "lucide-react"
+import { LayoutDashboardIcon, UsersIcon, FileTextIcon, Settings2Icon, BellIcon } from "lucide-react"
 
 import logo from "@/assets/logo-dark.png"
 
@@ -34,6 +34,11 @@ const data = {
       title: "Students",
       url: "/dashboard/students",
       icon: <UsersIcon />,
+    },
+    {
+      title: "Notifications",
+      url: "/dashboard/notifications",
+      icon: <BellIcon />,
     },
     {
       title: "Settings",

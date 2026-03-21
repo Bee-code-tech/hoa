@@ -10,22 +10,36 @@
     "image": "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&q=80&w=800",
     "badge": "Popular",
     "progress": 75,
-    "description": "Comprehensive training for entry-level security officers, covering legal aspects, emergency response, and public relations.",
+    "description": "Embark on a professional career in security with our comprehensive Level 1 certification. This course provides a deep dive into the fundamental principles of private security, legal frameworks, and ethical conduct. You will master the art of situational awareness, learn advanced emergency response protocols, and develop the communication skills necessary for high-stakes public relations. Designed for aspiring security professionals who demand excellence and a solid foundation in modern safety practices.",
     "modules": [
       {
         "id": "m1",
-        "title": "Introduction to Security",
+        "title": "Module 1: Professionalism and Ethics",
         "lessons": [
-          { "id": "l1", "title": "Role of a Security Officer", "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-          { "id": "l2", "title": "Legal Responsibilities", "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+          { "id": "l1", "title": "Role and Responsibilities", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+          { "id": "l2", "title": "Code of Conduct", "type": "pdf", "content": "Professional ethics and standard operating procedures for security personnel." }
         ]
       },
       {
         "id": "m2",
-        "title": "Emergency Procedures",
+        "title": "Module 2: Legal Aspects and Power of Arrest",
         "lessons": [
-          { "id": "l3", "title": "Fire Safety", "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-          { "id": "l4", "title": "First Aid Basics", "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+          { "id": "l3", "title": "Introduction to Criminal Law", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+          { "id": "l4", "title": "Use of Reasonable Force", "type": "pdf", "content": "Legal guidelines on the application of force and arrest procedures." }
+        ]
+      },
+      {
+        "id": "m3",
+        "title": "Module 3: Communication & Conflict Management",
+        "lessons": [
+          { "id": "l5", "title": "De-escalation Techniques", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+        ]
+      },
+      {
+        "id": "m4",
+        "title": "Module 4: Emergency Response & Fire Safety",
+        "lessons": [
+          { "id": "l6", "title": "Emergency Evacuation", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
         ]
       }
     ]
@@ -40,14 +54,28 @@
     "price": "£95",
     "image": "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=800",
     "progress": 30,
-    "description": "Essential first aid skills for the workplace, including CPR, choking, and wound management.",
+    "description": "Life-saving skills are non-negotiable in the modern workplace. This intensive one-day course equips you with the confidence and competence to handle medical emergencies effectively. From mastering CPR and AED operation to managing severe bleeding and choking incidents, our expert-led modules cover the essential protocols mandated by workplace safety regulations. Perfect for designated first-aiders and anyone committed to fostering a safe and responsive work environment.",
     "modules": [
       {
         "id": "m1",
-        "title": "Core First Aid",
+        "title": "Module 1: Primary Survey and CPR",
         "lessons": [
-          { "id": "l1", "title": "Incident Assessment", "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-          { "id": "l2", "title": "CPR Techniques", "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+          { "id": "l1", "title": "Initial Assessment (DRSABCD)", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+          { "id": "l2", "title": "CPR Techniques for Adults", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+        ]
+      },
+      {
+        "id": "m2",
+        "title": "Module 2: Severe Bleeding and Shock",
+        "lessons": [
+          { "id": "l3", "title": "Managing Major Trauma", "type": "pdf", "content": "Clinical steps for treating arterial bleeding and preventing circulatory shock." }
+        ]
+      },
+      {
+        "id": "m3",
+        "title": "Module 3: Workplace Compliance",
+        "lessons": [
+          { "id": "l4", "title": "Record Keeping & RIDDOR", "type": "pdf", "content": "Regulatory requirements for documenting workplace accidents and injuries." }
         ]
       }
     ]
@@ -63,13 +91,133 @@
     "image": "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&q=80&w=800",
     "badge": "New",
     "progress": 0,
-    "description": "Specialized training for CCTV operators, covering surveillance techniques, legal requirements, and system operation.",
+    "description": "Unlock the technical and legal complexities of professional surveillance. This specialist training program prepares you for a career as a CCTV Operator, focusing on pro-active monitoring, incident detection, and evidentiary management. You will explore advanced camera systems, learn Data Protection Act (DPA) requirements, and understand the protocols for collaborating with law enforcement. Ideal for those seeking specialized roles in control rooms and high-security installations.",
     "modules": [
       {
         "id": "m1",
-        "title": "Surveillance Basics",
+        "title": "Module 1: Equipment and Control",
         "lessons": [
-          { "id": "l1", "title": "Camera Operation", "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+          { "id": "l1", "title": "Principles of CCTV Systems", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+        ]
+      },
+      {
+        "id": "m2",
+        "title": "Module 2: Surveillance Law",
+        "lessons": [
+          { "id": "l2", "title": "Privacy and GDPR", "type": "pdf", "content": "Comprehensive guide to surveillance law and individual privacy rights." }
+        ]
+      },
+      {
+        "id": "m3",
+        "title": "Module 3: Reporting Incidents",
+        "lessons": [
+          { "id": "l3", "title": "Detailed Note Taking", "type": "pdf", "content": "How to create accurate, admissible evidence from surveillance logs." }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "slug": "fire-marshal-pro",
+    "title": "Fire Marshal Professional",
+    "category": "Safety",
+    "duration": "6 Hours",
+    "students": "320",
+    "price": "£120",
+    "image": "https://images.unsplash.com/photo-1510511459019-5dee9954889c?auto=format&fit=crop&q=80&w=800",
+    "progress": 10,
+    "description": "Become a critical asset in fire prevention and emergency evacuation. This course provides advanced training for designated fire marshals, covering everything from risk assessment to the lead role in evacuation drills. You will learn to identify fire hazards, inspect safety equipment, and lead panicked groups with calm authority. A must-have certification for safety-conscious leaders in schools, offices, and industrial complexes.",
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Module 1: Chemistry of Fire",
+        "lessons": [
+          { "id": "l1", "title": "The Fire Triangle", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+        ]
+      },
+      {
+        "id": "m2",
+        "title": "Module 2: Hazard Identification",
+        "lessons": [
+          { "id": "l2", "title": "Common Workplace Hazards", "type": "pdf", "content": "Learning to spot potential ignition sources and combustible materials." }
+        ]
+      },
+      {
+        "id": "m3",
+        "title": "Module 3: Evacuation Strategy",
+        "lessons": [
+          { "id": "l3", "title": "Managing Clear-outs", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "slug": "cyber-security-basics",
+    "title": "Cyber Security Fundamentals",
+    "category": "Technology",
+    "duration": "15 Hours",
+    "students": "2.1k",
+    "price": "£150",
+    "image": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800",
+    "badge": "Top Rated",
+    "progress": 0,
+    "description": "Protect digital assets and defend against modern cyber threats. This foundational course covers the essentials of network security, personal data protection, and threat intelligence. You'll learn to identify phishing attempts, secure wireless networks, and implement multi-factor authentication across your organization. Perfect for individuals and teams looking to safeguard their digital presence in an increasingly connected world.",
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Module 1: Threat Landscape",
+        "lessons": [
+          { "id": "l1", "title": "Common Attack Vectors", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+        ]
+      },
+      {
+        "id": "m2",
+        "title": "Module 2: Social Engineering",
+        "lessons": [
+          { "id": "l2", "title": "Detecting Phishing", "type": "pdf", "content": "Psychological tactics used by attackers and how to defend against them." }
+        ]
+      },
+      {
+        "id": "m3",
+        "title": "Module 3: Secure Passwords",
+        "lessons": [
+          { "id": "l3", "title": "Password Hygiene", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "slug": "conflict-management",
+    "title": "Advanced Conflict Management",
+    "category": "Soft Skills",
+    "duration": "8 Hours",
+    "students": "600",
+    "price": "£85",
+    "image": "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&q=80&w=800",
+    "progress": 50,
+    "description": "Master the art of de-escalation and assertive communication. This course is designed for professionals working in high-pressure environments who regularly interact with the public. Learn the psychology of aggression, the power of non-verbal communication, and the tactical use of language to defuse volatile situations. This program provides practical tools for emotional intelligence and conflict resolution in professional settings.",
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Module 1: Psychology of Aggression",
+        "lessons": [
+          { "id": "l1", "title": "Stress Response (Flight/Fight)", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+        ]
+      },
+      {
+        "id": "m2",
+        "title": "Module 2: Verbal Judo",
+        "lessons": [
+          { "id": "l2", "title": "Strategic Communication", "type": "pdf", "content": "Using specific phrases and tone to regain control of a discussion." }
+        ]
+      },
+      {
+        "id": "m3",
+        "title": "Module 3: Dynamic Risk Assessment",
+        "lessons": [
+          { "id": "l3", "title": "POPS Model", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
         ]
       }
     ]

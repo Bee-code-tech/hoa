@@ -6,6 +6,7 @@ import { SectionCards } from "./_components/section-cards"
 import { ChartAreaDefault } from "./_components/chart-area-default"
 import { CourseDistributionChart } from "./_components/course-distribution-chart"
 import { DataTable } from "./_components/data-table"
+import { studentColumns } from "./_components/columns/student-columns"
 import { RecentActivities } from "./_components/recent-activities"
 import { InsightBox } from "./_components/insight-box"
 
@@ -42,9 +43,9 @@ export default function Page() {
                   Manage and track student enrollment, progress, and performance across all courses.
                 </p>
               </div>
-              <div className="grid grid-cols-1 gap-4 px-4 lg:grid-cols-12 lg:px-6">
+              <div className="grid grid-cols-1 gap-4 px-4 lg:grid-cols-12 lg:px-6 pb-20">
                 <div className="lg:col-span-8 overflow-hidden min-h-[900px]">
-                  <DataTable data={data} />
+                  <DataTable columns={studentColumns} data={data} searchPlaceholder="Search students..." />
                 </div>
                 <div className="lg:col-span-4 flex flex-col gap-4 h-full">
                   <div className="flex-1 min-h-[450px]">

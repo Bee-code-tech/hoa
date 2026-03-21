@@ -12,36 +12,12 @@
     "progress": 75,
     "description": "Embark on a professional career in security with our comprehensive Level 1 certification. This course provides a deep dive into the fundamental principles of private security, legal frameworks, and ethical conduct. You will master the art of situational awareness, learn advanced emergency response protocols, and develop the communication skills necessary for high-stakes public relations. Designed for aspiring security professionals who demand excellence and a solid foundation in modern safety practices.",
     "modules": [
-      {
-        "id": "m1",
-        "title": "Module 1: Professionalism and Ethics",
-        "lessons": [
-          { "id": "l1", "title": "Role and Responsibilities", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-          { "id": "l2", "title": "Code of Conduct", "type": "pdf", "content": "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" }
-        ]
-      },
-      {
-        "id": "m2",
-        "title": "Module 2: Legal Aspects and Power of Arrest",
-        "lessons": [
-          { "id": "l3", "title": "Introduction to Criminal Law", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-          { "id": "l4", "title": "Use of Reasonable Force", "type": "pdf", "content": "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" }
-        ]
-      },
-      {
-        "id": "m3",
-        "title": "Module 3: Communication & Conflict Management",
-        "lessons": [
-          { "id": "l5", "title": "De-escalation Techniques", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
-        ]
-      },
-      {
-        "id": "m4",
-        "title": "Module 4: Emergency Response & Fire Safety",
-        "lessons": [
-          { "id": "l6", "title": "Emergency Evacuation", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
-        ]
-      }
+      { "id": "m1", "title": "Role and Responsibilities", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+      { "id": "m2", "title": "Code of Conduct", "type": "pdf", "content": "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+      { "id": "m3", "title": "Introduction to Criminal Law", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+      { "id": "m4", "title": "Use of Reasonable Force", "type": "pdf", "content": "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+      { "id": "m5", "title": "De-escalation Techniques", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+      { "id": "m6", "title": "Emergency Evacuation", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
     ]
   },
   {
@@ -56,28 +32,10 @@
     "progress": 30,
     "description": "Life-saving skills are non-negotiable in the modern workplace. This intensive one-day course equips you with the confidence and competence to handle medical emergencies effectively. From mastering CPR and AED operation to managing severe bleeding and choking incidents, our expert-led modules cover the essential protocols mandated by workplace safety regulations. Perfect for designated first-aiders and anyone committed to fostering a safe and responsive work environment.",
     "modules": [
-      {
-        "id": "m1",
-        "title": "Module 1: Primary Survey and CPR",
-        "lessons": [
-          { "id": "l1", "title": "Initial Assessment (DRSABCD)", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-          { "id": "l2", "title": "CPR Techniques for Adults", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
-        ]
-      },
-      {
-        "id": "m2",
-        "title": "Module 2: Severe Bleeding and Shock",
-        "lessons": [
-          { "id": "l3", "title": "Managing Major Trauma", "type": "pdf", "content": "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" }
-        ]
-      },
-      {
-        "id": "m3",
-        "title": "Module 3: Workplace Compliance",
-        "lessons": [
-          { "id": "l4", "title": "Record Keeping & RIDDOR", "type": "pdf", "content": "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" }
-        ]
-      }
+      { "id": "m1", "title": "Initial Assessment (DRSABCD)", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+      { "id": "m2", "title": "CPR Techniques for Adults", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+      { "id": "m3", "title": "Managing Major Trauma", "type": "pdf", "content": "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+      { "id": "m4", "title": "Record Keeping & RIDDOR", "type": "pdf", "content": "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" }
     ]
   },
   {
@@ -93,27 +51,9 @@
     "progress": 0,
     "description": "Unlock the technical and legal complexities of professional surveillance. This specialist training program prepares you for a career as a CCTV Operator, focusing on pro-active monitoring, incident detection, and evidentiary management. You will explore advanced camera systems, learn Data Protection Act (DPA) requirements, and understand the protocols for collaborating with law enforcement. Ideal for those seeking specialized roles in control rooms and high-security installations.",
     "modules": [
-      {
-        "id": "m1",
-        "title": "Module 1: Equipment and Control",
-        "lessons": [
-          { "id": "l1", "title": "Principles of CCTV Systems", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
-        ]
-      },
-      {
-        "id": "m2",
-        "title": "Module 2: Surveillance Law",
-        "lessons": [
-          { "id": "l2", "title": "Privacy and GDPR", "type": "pdf", "content": "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" }
-        ]
-      },
-      {
-        "id": "m3",
-        "title": "Module 3: Reporting Incidents",
-        "lessons": [
-          { "id": "l3", "title": "Detailed Note Taking", "type": "pdf", "content": "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" }
-        ]
-      }
+      { "id": "m1", "title": "Principles of CCTV Systems", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+      { "id": "m2", "title": "Privacy and GDPR", "type": "pdf", "content": "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+      { "id": "m3", "title": "Detailed Note Taking", "type": "pdf", "content": "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" }
     ]
   },
   {
@@ -128,27 +68,9 @@
     "progress": 10,
     "description": "Become a critical asset in fire prevention and emergency evacuation. This course provides advanced training for designated fire marshals, covering everything from risk assessment to the lead role in evacuation drills. You will learn to identify fire hazards, inspect safety equipment, and lead panicked groups with calm authority. A must-have certification for safety-conscious leaders in schools, offices, and industrial complexes.",
     "modules": [
-      {
-        "id": "m1",
-        "title": "Module 1: Chemistry of Fire",
-        "lessons": [
-          { "id": "l1", "title": "The Fire Triangle", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
-        ]
-      },
-      {
-        "id": "m2",
-        "title": "Module 2: Hazard Identification",
-        "lessons": [
-          { "id": "l2", "title": "Common Workplace Hazards", "type": "pdf", "content": "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" }
-        ]
-      },
-      {
-        "id": "m3",
-        "title": "Module 3: Evacuation Strategy",
-        "lessons": [
-          { "id": "l3", "title": "Managing Clear-outs", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
-        ]
-      }
+      { "id": "m1", "title": "The Fire Triangle", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+      { "id": "m2", "title": "Common Workplace Hazards", "type": "pdf", "content": "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+      { "id": "m3", "title": "Managing Clear-outs", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
     ]
   },
   {
@@ -164,27 +86,9 @@
     "progress": 0,
     "description": "Protect digital assets and defend against modern cyber threats. This foundational course covers the essentials of network security, personal data protection, and threat intelligence. You'll learn to identify phishing attempts, secure wireless networks, and implement multi-factor authentication across your organization. Perfect for individuals and teams looking to safeguard their digital presence in an increasingly connected world.",
     "modules": [
-      {
-        "id": "m1",
-        "title": "Module 1: Threat Landscape",
-        "lessons": [
-          { "id": "l1", "title": "Common Attack Vectors", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
-        ]
-      },
-      {
-        "id": "m2",
-        "title": "Module 2: Social Engineering",
-        "lessons": [
-          { "id": "l2", "title": "Detecting Phishing", "type": "pdf", "content": "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" }
-        ]
-      },
-      {
-        "id": "m3",
-        "title": "Module 3: Secure Passwords",
-        "lessons": [
-          { "id": "l3", "title": "Password Hygiene", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
-        ]
-      }
+      { "id": "m1", "title": "Common Attack Vectors", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+      { "id": "m2", "title": "Detecting Phishing", "type": "pdf", "content": "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+      { "id": "m3", "title": "Password Hygiene", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
     ]
   },
   {
@@ -199,27 +103,9 @@
     "progress": 50,
     "description": "Master the art of de-escalation and assertive communication. This course is designed for professionals working in high-pressure environments who regularly interact with the public. Learn the psychology of aggression, the power of non-verbal communication, and the tactical use of language to defuse volatile situations. This program provides practical tools for emotional intelligence and conflict resolution in professional settings.",
     "modules": [
-      {
-        "id": "m1",
-        "title": "Module 1: Psychology of Aggression",
-        "lessons": [
-          { "id": "l1", "title": "Stress Response (Flight/Fight)", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
-        ]
-      },
-      {
-        "id": "m2",
-        "title": "Module 2: Verbal Judo",
-        "lessons": [
-          { "id": "l2", "title": "Strategic Communication", "type": "pdf", "content": "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" }
-        ]
-      },
-      {
-        "id": "m3",
-        "title": "Module 3: Dynamic Risk Assessment",
-        "lessons": [
-          { "id": "l3", "title": "POPS Model", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
-        ]
-      }
+      { "id": "m1", "title": "Stress Response (Flight/Fight)", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+      { "id": "m2", "title": "Strategic Communication", "type": "pdf", "content": "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+      { "id": "m3", "title": "POPS Model", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
     ]
   }
 ]

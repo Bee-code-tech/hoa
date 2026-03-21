@@ -125,15 +125,55 @@ export default function CourseDetailPage() {
                       allowFullScreen
                     />
                   ) : (
-                    <div className="w-full h-full flex flex-col items-center justify-center bg-accent/10 p-12 text-center space-y-6">
-                       <FileText className="size-20 text-primary opacity-20" />
-                       <div className="max-w-md">
-                         <h3 className="text-2xl font-bold mb-2">Reading Material</h3>
-                         <p className="text-muted-foreground mb-8">{activeLesson.content}</p>
-                         <Button variant="outline" className="gap-2">
-                           <FileText className="size-4" /> Download PDF Guide
-                         </Button>
-                       </div>
+                    <div className="w-full h-full bg-white flex flex-col">
+                      {/* Document Toolbar Mockup */}
+                      <div className="flex items-center justify-between px-4 py-2 border-b bg-muted/50 text-muted-foreground shrink-0">
+                        <div className="flex items-center gap-4">
+                          <Button variant="ghost" size="icon" className="size-8"><FileText className="size-4" /></Button>
+                          <span className="text-xs font-medium border-l pl-4">Page 1 of 12</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                           <Button variant="ghost" size="icon" className="size-8">－</Button>
+                           <span className="text-xs font-bold px-2">100%</span>
+                           <Button variant="ghost" size="icon" className="size-8">＋</Button>
+                        </div>
+                        <Button variant="ghost" size="icon" className="size-8"><FileText className="size-4 rotate-90" /></Button>
+                      </div>
+
+                      {/* Actual Document Content */}
+                      <div className="flex-1 overflow-y-auto p-8 lg:p-12 bg-slate-100 flex justify-center">
+                        <div className="w-full max-w-2xl bg-white shadow-2xl p-10 lg:p-16 min-h-[1100px] rounded-sm transform transition-transform">
+                          <header className="border-b-2 border-primary/20 pb-8 mb-8">
+                             <h4 className="text-3xl font-serif font-extrabold text-primary mb-2">{activeLesson.title}</h4>
+                             <p className="text-gold font-semibold tracking-widest uppercase text-xs">Technical Training Manual • HOAServices</p>
+                          </header>
+                          
+                          <div className="space-y-6 font-serif text-slate-800 leading-relaxed text-lg">
+                            <p className="first-letter:text-5xl first-letter:font-bold first-letter:mr-3 first-letter:float-left first-letter:text-primary">
+                              {activeLesson.content} This comprehensive guide provides the strategic framework required for professional certification. Understanding these core principles is essential for maintaining operational excellence in high-stakes environments.
+                            </p>
+                            <p>
+                              As you progress through this module, pay close attention to the intersection of legal requirements and practical application. Professionalism in these sectors is defined by a commitment to continuous learning and the rigorous application of safety protocols.
+                            </p>
+                            <div className="py-8">
+                              <div className="h-px w-full bg-slate-200" />
+                            </div>
+                            <h5 className="font-bold text-xl text-primary">Key Learning Objectives</h5>
+                            <ul className="list-disc pl-5 space-y-3 marker:text-gold">
+                              <li>Demonstrate mastery of core industry regulations.</li>
+                              <li>Implement advanced safety protocols in real-world scenarios.</li>
+                              <li>Excel in professional communication and reporting styles.</li>
+                              <li>Maintain the highest standards of ethical conduct.</li>
+                            </ul>
+                          </div>
+                          
+                          <footer className="mt-20 pt-8 border-t text-[10px] text-slate-400 flex justify-between uppercase tracking-widest">
+                            <span>© 2026 HOAServices UK</span>
+                            <span>Confidential Training Content</span>
+                            <span>Page 1</span>
+                          </footer>
+                        </div>
+                      </div>
                     </div>
                   )
                 ) : (
@@ -178,3 +218,4 @@ export default function CourseDetailPage() {
     </SidebarProvider>
   )
 }
+

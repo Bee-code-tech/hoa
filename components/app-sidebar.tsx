@@ -18,6 +18,7 @@ const data = {
     name: "Admin",
     email: "admin@hoaservices.co.uk",
     avatar: "https://ui-avatars.com/api/?name=Admin&background=002147&color=fff",
+    role: "admin" as "admin" | "student",
   },
   navMain: [
     {
@@ -57,7 +58,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </Link>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain 
+          items={data.navMain.filter(item => {
+            if (data.user.role === "student") {
+              return ["Courses", "Settings"].includes(item.title)
+            }
+            return true
+          })} 
+        />
       </SidebarContent>
     </Sidebar>
   )

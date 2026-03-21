@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
@@ -11,8 +11,9 @@ export default function Page() {
   const [role, setRole] = useState<string | null>(null)
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user") || "{}")
-    setRole(user.role || "student")
+    // In a real app, this would be reactive to the user's role
+    const user = JSON.parse(localStorage.getItem("user") || '{"role": "admin"}')
+    setRole(user.role)
   }, [])
 
   return (
@@ -27,8 +28,18 @@ export default function Page() {
       <AppSidebar variant="inset" />
       <SidebarInset>
         <SiteHeader />
-        <div className="flex flex-1 flex-col gap-4 p-4 lg:p-6 lg:gap-6">
-          {role === "admin" ? <AdminCoursesTable /> : <StudentCourseGrid />}
+        <div className="flex flex-1 flex-col">
+          <div className="@container/main flex flex-1 flex-col gap-2">
+            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+               {role === "admin" ? (
+                 <AdminCoursesTable />
+               ) : (
+                 <div className="px-4 lg:px-6">
+                    <StudentCourseGrid />
+                 </div>
+               )}
+            </div>
+          </div>
         </div>
       </SidebarInset>
     </SidebarProvider>

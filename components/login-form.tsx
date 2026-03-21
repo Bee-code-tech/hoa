@@ -1,3 +1,5 @@
+"use client"
+
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -16,10 +18,30 @@ import {
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
 
+import { useRouter } from "next/navigation"
+
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const router = useRouter()
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    const email = formData.get("email") as string
+    const password = formData.get("password") as string
+
+    if (password === "password@123") {
+      const role = email === "admin@hoaservices.co.uk" ? "admin" : "student"
+      const user = { email, role }
+      localStorage.setItem("user", JSON.stringify(user))
+      router.push("/dashboard")
+    } else {
+      alert("Invalid credentials. Try password@123")
+    }
+  }
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -30,12 +52,13 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleSubmit}>
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   placeholder="m@example.com"
                   required
@@ -51,11 +74,11 @@ export function LoginForm({
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" required />
+                <Input id="password" name="password" type="password" required />
               </Field>
               <Field>
-                <Button type="submit">Login</Button>
-                <Button variant="outline" type="button">
+                <Button type="submit" className="w-full">Login</Button>
+                <Button variant="outline" type="button" className="w-full">
                   Login with Google
                 </Button>
                 <FieldDescription className="text-center">

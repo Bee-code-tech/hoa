@@ -12,8 +12,8 @@ const activities = [
     target: "Security Level 1",
     time: "2 mins ago",
     icon: IconUserPlus,
-    iconColor: "text-blue-500",
-    iconBg: "bg-blue-500/10",
+    iconColor: "text-primary",
+    iconBg: "bg-primary/10",
   },
   {
     id: 2,
@@ -23,8 +23,8 @@ const activities = [
     target: "Health & Safety",
     time: "1 hour ago",
     icon: IconCircleCheck,
-    iconColor: "text-green-500",
-    iconBg: "bg-green-500/10",
+    iconColor: "text-gold",
+    iconBg: "bg-gold/10",
   },
   {
     id: 3,
@@ -34,8 +34,8 @@ const activities = [
     target: "Management Essentials",
     time: "3 hours ago",
     icon: IconCreditCard,
-    iconColor: "text-purple-500",
-    iconBg: "bg-purple-500/10",
+    iconColor: "text-primary",
+    iconBg: "bg-primary/10",
   },
   {
     id: 4,
@@ -45,8 +45,8 @@ const activities = [
     target: "Cyber Security Fundamentals",
     time: "5 hours ago",
     icon: IconPlus,
-    iconColor: "text-orange-500",
-    iconBg: "bg-orange-500/10",
+    iconColor: "text-gold",
+    iconBg: "bg-gold/10",
   },
   {
     id: 5,
@@ -56,8 +56,8 @@ const activities = [
     target: "First Aid Level 2",
     time: "1 day ago",
     icon: IconUserPlus,
-    iconColor: "text-blue-500",
-    iconBg: "bg-blue-500/10",
+    iconColor: "text-primary",
+    iconBg: "bg-primary/10",
   },
 ]
 

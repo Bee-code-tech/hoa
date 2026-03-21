@@ -1,10 +1,20 @@
+"use client"
+
+import { useEffect, useState } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
-
-import { ComingSoon } from "@/components/coming-soon"
+import { AdminCoursesTable } from "./_components/admin-courses"
+import { StudentCourseGrid } from "./_components/student-courses"
 
 export default function Page() {
+  const [role, setRole] = useState<string | null>(null)
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || "{}")
+    setRole(user.role || "student")
+  }, [])
+
   return (
     <SidebarProvider
       style={
@@ -17,7 +27,9 @@ export default function Page() {
       <AppSidebar variant="inset" />
       <SidebarInset>
         <SiteHeader />
-        <ComingSoon title="Courses" />
+        <div className="flex flex-1 flex-col gap-4 p-4 lg:p-6 lg:gap-6">
+          {role === "admin" ? <AdminCoursesTable /> : <StudentCourseGrid />}
+        </div>
       </SidebarInset>
     </SidebarProvider>
   )

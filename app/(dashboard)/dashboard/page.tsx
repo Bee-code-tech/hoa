@@ -7,6 +7,7 @@ import { ChartAreaDefault } from "./_components/chart-area-default"
 import { CourseDistributionChart } from "./_components/course-distribution-chart"
 import { DataTable } from "./_components/data-table"
 import { RecentActivities } from "./_components/recent-activities"
+import { InsightBox } from "./_components/insight-box"
 
 import data from "./data.json"
 
@@ -35,12 +36,23 @@ export default function Page() {
                   <CourseDistributionChart />
                 </div>
               </div>
+              <div className="flex flex-col gap-2 px-4 lg:px-6">
+                <h2 className="text-2xl font-bold tracking-tight">Student Management</h2>
+                <p className="text-muted-foreground">
+                  Manage and track student enrollment, progress, and performance across all courses.
+                </p>
+              </div>
               <div className="grid grid-cols-1 gap-4 px-4 lg:grid-cols-12 lg:px-6">
-                <div className="lg:col-span-8">
+                <div className="lg:col-span-8 overflow-hidden min-h-[900px]">
                   <DataTable data={data} />
                 </div>
-                <div className="lg:col-span-4">
-                  <RecentActivities />
+                <div className="lg:col-span-4 flex flex-col gap-4 h-full">
+                  <div className="flex-1 min-h-[450px]">
+                    <RecentActivities />
+                  </div>
+                  <div className="flex-1 min-h-[440px]">
+                    <InsightBox />
+                  </div>
                 </div>
               </div>
             </div>

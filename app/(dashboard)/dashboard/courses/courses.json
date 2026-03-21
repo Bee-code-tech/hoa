@@ -1,0 +1,77 @@
+[
+  {
+    "id": 1,
+    "slug": "security-officer-l1",
+    "title": "Security Officer Level 1",
+    "category": "Security",
+    "duration": "40 Hours",
+    "students": "1.2k",
+    "price": "£199",
+    "image": "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&q=80&w=800",
+    "badge": "Popular",
+    "progress": 75,
+    "description": "Comprehensive training for entry-level security officers, covering legal aspects, emergency response, and public relations.",
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Introduction to Security",
+        "lessons": [
+          { "id": "l1", "title": "Role of a Security Officer", "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+          { "id": "l2", "title": "Legal Responsibilities", "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+        ]
+      },
+      {
+        "id": "m2",
+        "title": "Emergency Procedures",
+        "lessons": [
+          { "id": "l3", "title": "Fire Safety", "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+          { "id": "l4", "title": "First Aid Basics", "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "slug": "emergency-first-aid",
+    "title": "Emergency First Aid at Work",
+    "category": "Health & Safety",
+    "duration": "1 Day",
+    "students": "850",
+    "price": "£95",
+    "image": "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=800",
+    "progress": 30,
+    "description": "Essential first aid skills for the workplace, including CPR, choking, and wound management.",
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Core First Aid",
+        "lessons": [
+          { "id": "l1", "title": "Incident Assessment", "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+          { "id": "l2", "title": "CPR Techniques", "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "slug": "cctv-operator",
+    "title": "CCTV Operator Training",
+    "category": "Surveillance",
+    "duration": "30 Hours",
+    "students": "450",
+    "price": "£250",
+    "image": "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&q=80&w=800",
+    "badge": "New",
+    "progress": 0,
+    "description": "Specialized training for CCTV operators, covering surveillance techniques, legal requirements, and system operation.",
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Surveillance Basics",
+        "lessons": [
+          { "id": "l1", "title": "Camera Operation", "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+        ]
+      }
+    ]
+  }
+]

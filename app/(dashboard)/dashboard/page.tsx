@@ -1,4 +1,6 @@
-import { AppSidebar } from "@/components/app-sidebar"
+"use client"
+
+import { useEffect, useState } from "react"
 import { SiteHeader } from "@/components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 
@@ -14,8 +16,14 @@ import StudentOverview from "./_components/student-overview"
 import data from "./data.json"
 
 export default function Page() {
-  // Simulate role check - In a real app this would come from an auth hook or session
-  const userRole = "admin" // Switch to "student" to see student view
+  const [userRole, setUserRole] = useState<string | null>(null)
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || '{"role": "admin"}')
+    setUserRole(user.role)
+  }, [])
+
+  if (!userRole) return null // Prevent flash of wrong content
 
   return (
     <SidebarProvider

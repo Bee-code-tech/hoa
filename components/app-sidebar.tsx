@@ -50,6 +50,21 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const [userRole, setUserRole] = React.useState<string | null>(null)
+
+  React.useEffect(() => {
+    // In a real app this would be in an auth context
+    const user = JSON.parse(localStorage.getItem("user") || '{"role": "admin"}')
+    setUserRole(user.role)
+  }, [])
+
+  const navItems = data.navMain.filter(item => {
+    if (userRole === "student") {
+      return ["Courses", "Settings"].includes(item.title)
+    }
+    return true
+  })
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader className="py-6 px-4">
@@ -58,14 +73,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </Link>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain 
-          items={data.navMain.filter(item => {
-            if (data.user.role === "student") {
-              return ["Courses", "Settings"].includes(item.title)
-            }
-            return true
-          })} 
-        />
+        <NavMain items={navItems} />
       </SidebarContent>
     </Sidebar>
   )

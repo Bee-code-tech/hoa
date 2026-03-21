@@ -27,7 +27,7 @@ export default function CourseDetailPage() {
   
   // Robust data retrieval
   const data = (coursesData as any).default || coursesData
-  const course = Array.isArray(data) ? data.find((c: any) => c.slug === slug) : null
+  const course = Array.isArray(data) ? data.find((c: any) => c.slug === slug || c.id === slug) : null
   
   const [activeModule, setActiveModule] = useState<any>(null)
   const [completedModules, setCompletedModules] = useState<string[]>([])

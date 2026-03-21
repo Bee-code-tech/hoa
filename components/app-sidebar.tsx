@@ -9,7 +9,14 @@ import {
   SidebarContent,
   SidebarHeader,
 } from "@/components/ui/sidebar"
-import { LayoutDashboardIcon, UsersIcon, FileTextIcon, Settings2Icon, BellIcon } from "lucide-react"
+import { 
+  LayoutDashboardIcon, 
+  UsersIcon, 
+  FileTextIcon, 
+  Settings2Icon, 
+  BellIcon,
+  BookOpenIcon
+} from "lucide-react"
 
 import logo from "@/assets/logo-dark.png"
 
@@ -25,6 +32,11 @@ const data = {
       title: "Overview",
       url: "/dashboard",
       icon: <LayoutDashboardIcon />,
+    },
+    {
+      title: "My Courses",
+      url: "/dashboard/my-courses",
+      icon: <BookOpenIcon />,
     },
     {
       title: "Courses",
@@ -60,9 +72,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const navItems = data.navMain.filter(item => {
     if (userRole === "student") {
-      return ["Courses", "Settings"].includes(item.title)
+      // Student only sees personal learning and settings
+      return ["My Courses", "Courses", "Settings"].includes(item.title)
     }
-    return true
+    // Admin sees everything EXCEPT student personal view
+    return item.title !== "My Courses"
   })
 
   return (

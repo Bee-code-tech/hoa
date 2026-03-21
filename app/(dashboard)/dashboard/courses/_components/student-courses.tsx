@@ -7,41 +7,48 @@ import { Button } from "@/components/ui/button"
 import { Search, Filter } from "lucide-react"
 import coursesData from "../courses.json"
 
-export function StudentCourseGrid() {
+interface StudentCourseGridProps {
+  initialData?: any[]
+  isPersonalView?: boolean
+}
+
+export function StudentCourseGrid({ initialData, isPersonalView = false }: StudentCourseGridProps) {
   const [searchQuery, setSearchQuery] = useState("")
   const [activeCategory, setActiveCategory] = useState("All")
 
-  const data = (coursesData as any).default || coursesData
+  const data = initialData || (coursesData as any).default || coursesData
   
   const categories = ["All", ...new Set(data.map((c: any) => c.category))]
 
   const filteredCourses = data.filter((course: any) => {
     const matchesSearch = course.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                         course.description.toLowerCase().includes(searchQuery.toLowerCase())
+                         course.description?.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesCategory = activeCategory === "All" || course.category === activeCategory
     return matchesSearch && matchesCategory
   })
 
   return (
     <div className="space-y-10">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div className="space-y-2">
-          <h2 className="text-4xl font-extrabold tracking-tight text-primary">Discover Your Next Course</h2>
-          <p className="text-lg text-muted-foreground max-w-2xl">
-            Advance your career with our industry-leading certifications and professional training programs.
-          </p>
+      {!isPersonalView && (
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="space-y-2">
+            <h2 className="text-4xl font-extrabold tracking-tight text-primary">Discover Your Next Course</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl">
+              Advance your career with our industry-leading certifications and professional training programs.
+            </p>
+          </div>
+          
+          <div className="relative w-full md:w-80 group">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground group-focus-within:text-gold transition-colors" />
+            <Input 
+              placeholder="Search courses..." 
+              className="pl-10 h-12 bg-card border-muted-foreground/20 rounded-xl shadow-sm focus:ring-gold"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
         </div>
-        
-        <div className="relative w-full md:w-80 group">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground group-focus-within:text-gold transition-colors" />
-          <Input 
-            placeholder="Search courses..." 
-            className="pl-10 h-12 bg-card border-muted-foreground/20 rounded-xl shadow-sm focus:ring-gold"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-      </div>
+      )}
 
       <div className="flex flex-wrap items-center gap-2 border-b pb-6">
         <div className="flex items-center gap-2 mr-4 text-primary font-semibold text-sm">
@@ -78,7 +85,7 @@ export function StudentCourseGrid() {
               image={course.image}
               badge={course.badge}
               progress={course.progress}
-              showProgress={true}
+              showProgress={isPersonalView}
             />
           ))}
         </div>
@@ -95,4 +102,3 @@ export function StudentCourseGrid() {
     </div>
   )
 }
-

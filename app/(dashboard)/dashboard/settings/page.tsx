@@ -24,8 +24,16 @@ import SecurityForm from "./_components/SecurityForm"
 import AdminSettings from "./_components/AdminSettings"
 
 export default function SettingsPage() {
-  // Simulate checking role
-  const isAdmin = true 
+  const [userRole, setUserRole] = React.useState<string | null>(null)
+
+  React.useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || '{"role": "admin"}')
+    setUserRole(user.role)
+  }, [])
+
+  if (!userRole) return null
+
+  const isAdmin = userRole === "admin"
 
   return (
     <SidebarProvider

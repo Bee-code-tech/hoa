@@ -17,7 +17,7 @@
         "title": "Module 1: Professionalism and Ethics",
         "lessons": [
           { "id": "l1", "title": "Role and Responsibilities", "type": "video", "content": "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-          { "id": "l2", "title": "Code of Conduct", "type": "pdf", "content": "Professional ethics and standard operating procedures for security personnel." }
+          { "id": "l2", "title": "Code of Conduct", "type": "pdf", "content": "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" }
         ]
       },
       {
@@ -68,14 +68,14 @@
         "id": "m2",
         "title": "Module 2: Severe Bleeding and Shock",
         "lessons": [
-          { "id": "l3", "title": "Managing Major Trauma", "type": "pdf", "content": "Clinical steps for treating arterial bleeding and preventing circulatory shock." }
+          { "id": "l3", "title": "Managing Major Trauma", "type": "pdf", "content": "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" }
         ]
       },
       {
         "id": "m3",
         "title": "Module 3: Workplace Compliance",
         "lessons": [
-          { "id": "l4", "title": "Record Keeping & RIDDOR", "type": "pdf", "content": "Regulatory requirements for documenting workplace accidents and injuries." }
+          { "id": "l4", "title": "Record Keeping & RIDDOR", "type": "pdf", "content": "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" }
         ]
       }
     ]
@@ -104,14 +104,14 @@
         "id": "m2",
         "title": "Module 2: Surveillance Law",
         "lessons": [
-          { "id": "l2", "title": "Privacy and GDPR", "type": "pdf", "content": "Comprehensive guide to surveillance law and individual privacy rights." }
+          { "id": "l2", "title": "Privacy and GDPR", "type": "pdf", "content": "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" }
         ]
       },
       {
         "id": "m3",
         "title": "Module 3: Reporting Incidents",
         "lessons": [
-          { "id": "l3", "title": "Detailed Note Taking", "type": "pdf", "content": "How to create accurate, admissible evidence from surveillance logs." }
+          { "id": "l3", "title": "Detailed Note Taking", "type": "pdf", "content": "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" }
         ]
       }
     ]

@@ -1,21 +1,33 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { Button } from "@/components/ui/button"
-import { ChevronLeft, PlayCircle, CheckCircle, Lock, FileText } from "lucide-react"
+import { 
+  ChevronLeft, 
+  PlayCircle, 
+  CheckCircle, 
+  Lock, 
+  FileText, 
+  Fullscreen, 
+  Maximize2, 
+  Minimize2,
+  ExternalLink
+} from "lucide-react"
 import coursesData from "../courses.json"
 
 export default function CourseDetailPage() {
   const { slug } = useParams()
   const router = useRouter()
+  const contentRef = useRef<HTMLDivElement>(null)
+  
   const course = coursesData.find((c) => c.slug === slug)
-
   const [activeLesson, setActiveLesson] = useState<any>(null)
   const [completedModules, setCompletedModules] = useState<string[]>([])
+  const [isFocusMode, setIsFocusMode] = useState(false)
 
   useEffect(() => {
     if (course) {
@@ -39,6 +51,15 @@ export default function CourseDetailPage() {
     return !completedModules.includes(previousModuleId)
   }
 
+  const toggleFullScreen = () => {
+    if (!contentRef.current) return
+    if (document.fullscreenElement) {
+      document.exitFullscreen()
+    } else {
+      contentRef.current.requestFullscreen()
+    }
+  }
+
   const currentModuleIndex = course.modules.findIndex(m => m.lessons.some(l => l.id === activeLesson?.id))
   const isCurrentModuleCompleted = currentModuleIndex !== -1 && completedModules.includes(course.modules[currentModuleIndex].id)
 
@@ -51,21 +72,23 @@ export default function CourseDetailPage() {
         } as React.CSSProperties
       }
     >
-      <AppSidebar variant="inset" />
+      <AppSidebar variant="inset" className={isFocusMode ? "hidden" : ""} />
       <SidebarInset>
-        <SiteHeader />
-        <div className="flex flex-1 flex-col gap-6 p-4 lg:p-6 bg-muted/30">
-          <Button 
-            variant="ghost" 
-            className="w-fit gap-2 -ml-2" 
-            onClick={() => router.back()}
-          >
-            <ChevronLeft className="size-4" /> Back to Courses
-          </Button>
+        {!isFocusMode && <SiteHeader />}
+        <div className={`flex flex-1 flex-col gap-6 p-4 lg:p-6 bg-muted/30 transition-all duration-300 ${isFocusMode ? "lg:p-0" : ""}`}>
+          {!isFocusMode && (
+            <Button 
+              variant="ghost" 
+              className="w-fit gap-2 -ml-2" 
+              onClick={() => router.back()}
+            >
+              <ChevronLeft className="size-4" /> Back to Courses
+            </Button>
+          )}
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div className={`grid grid-cols-1 ${isFocusMode ? "lg:grid-cols-1" : "lg:grid-cols-12"} gap-8 h-full`}>
             {/* Left Sidebar: Modules & Lessons */}
-            <div className="lg:col-span-4 space-y-4">
+            <div className={`lg:col-span-4 space-y-4 ${isFocusMode ? "hidden" : "block"}`}>
               <div className="p-4 bg-card border rounded-2xl shadow-sm">
                 <h3 className="font-bold text-lg mb-4 px-2">Course Modules</h3>
                 <div className="space-y-6">
@@ -113,8 +136,38 @@ export default function CourseDetailPage() {
             </div>
 
             {/* Right Content: Content Player & Details */}
-            <div className="lg:col-span-8 space-y-6">
-              <div className="aspect-video w-full overflow-hidden rounded-3xl bg-black border shadow-2xl relative">
+            <div className={`${isFocusMode ? "lg:col-span-1" : "lg:col-span-8"} space-y-6 h-full flex flex-col`}>
+              {/* Toolbar for focus / fullscreen */}
+              <div className="flex items-center justify-between bg-card border rounded-2xl px-4 py-2 shadow-sm shrink-0">
+                <div className="flex items-center gap-2">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="gap-2"
+                    onClick={() => setIsFocusMode(!isFocusMode)}
+                  >
+                    {isFocusMode ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
+                    {isFocusMode ? "Exit Focus" : "Focus Mode"}
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="gap-2"
+                    onClick={toggleFullScreen}
+                  >
+                    <Fullscreen className="size-4" /> Fullscreen
+                  </Button>
+                </div>
+                {activeLesson?.type === 'pdf' && (
+                  <Button variant="ghost" size="sm" asChild>
+                    <a href={activeLesson.content} target="_blank" rel="noopener noreferrer" className="gap-2">
+                      <ExternalLink className="size-4" /> Open Original
+                    </a>
+                  </Button>
+                )}
+              </div>
+
+              <div ref={contentRef} className={`aspect-video w-full overflow-hidden rounded-3xl bg-black border shadow-2xl relative transition-all duration-300 flex-1 ${isFocusMode ? "max-h-[85vh]" : ""}`}>
                 {activeLesson ? (
                   activeLesson.type === 'video' ? (
                     <iframe
@@ -125,56 +178,11 @@ export default function CourseDetailPage() {
                       allowFullScreen
                     />
                   ) : (
-                    <div className="w-full h-full bg-white flex flex-col">
-                      {/* Document Toolbar Mockup */}
-                      <div className="flex items-center justify-between px-4 py-2 border-b bg-muted/50 text-muted-foreground shrink-0">
-                        <div className="flex items-center gap-4">
-                          <Button variant="ghost" size="icon" className="size-8"><FileText className="size-4" /></Button>
-                          <span className="text-xs font-medium border-l pl-4">Page 1 of 12</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                           <Button variant="ghost" size="icon" className="size-8">－</Button>
-                           <span className="text-xs font-bold px-2">100%</span>
-                           <Button variant="ghost" size="icon" className="size-8">＋</Button>
-                        </div>
-                        <Button variant="ghost" size="icon" className="size-8"><FileText className="size-4 rotate-90" /></Button>
-                      </div>
-
-                      {/* Actual Document Content */}
-                      <div className="flex-1 overflow-y-auto p-8 lg:p-12 bg-slate-100 flex justify-center">
-                        <div className="w-full max-w-2xl bg-white shadow-2xl p-10 lg:p-16 min-h-[1100px] rounded-sm transform transition-transform">
-                          <header className="border-b-2 border-primary/20 pb-8 mb-8">
-                             <h4 className="text-3xl font-serif font-extrabold text-primary mb-2">{activeLesson.title}</h4>
-                             <p className="text-gold font-semibold tracking-widest uppercase text-xs">Technical Training Manual • HOAServices</p>
-                          </header>
-                          
-                          <div className="space-y-6 font-serif text-slate-800 leading-relaxed text-lg">
-                            <p className="first-letter:text-5xl first-letter:font-bold first-letter:mr-3 first-letter:float-left first-letter:text-primary">
-                              {activeLesson.content} This comprehensive guide provides the strategic framework required for professional certification. Understanding these core principles is essential for maintaining operational excellence in high-stakes environments.
-                            </p>
-                            <p>
-                              As you progress through this module, pay close attention to the intersection of legal requirements and practical application. Professionalism in these sectors is defined by a commitment to continuous learning and the rigorous application of safety protocols.
-                            </p>
-                            <div className="py-8">
-                              <div className="h-px w-full bg-slate-200" />
-                            </div>
-                            <h5 className="font-bold text-xl text-primary">Key Learning Objectives</h5>
-                            <ul className="list-disc pl-5 space-y-3 marker:text-gold">
-                              <li>Demonstrate mastery of core industry regulations.</li>
-                              <li>Implement advanced safety protocols in real-world scenarios.</li>
-                              <li>Excel in professional communication and reporting styles.</li>
-                              <li>Maintain the highest standards of ethical conduct.</li>
-                            </ul>
-                          </div>
-                          
-                          <footer className="mt-20 pt-8 border-t text-[10px] text-slate-400 flex justify-between uppercase tracking-widest">
-                            <span>© 2026 HOAServices UK</span>
-                            <span>Confidential Training Content</span>
-                            <span>Page 1</span>
-                          </footer>
-                        </div>
-                      </div>
-                    </div>
+                    <iframe
+                      className="w-full h-full bg-white"
+                      src={`${activeLesson.content}#toolbar=1&navpanes=0&scrollbar=1`}
+                      title={activeLesson.title}
+                    />
                   )
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-white/50">
@@ -183,34 +191,36 @@ export default function CourseDetailPage() {
                 )}
               </div>
 
-              <div className="bg-card border rounded-3xl p-6 lg:p-8 space-y-6 shadow-sm">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                   <div className="space-y-1">
-                     <h2 className="text-2xl lg:text-3xl font-bold tracking-tight text-primary">
-                      {activeLesson?.title || course.title}
-                    </h2>
-                    <p className="text-sm text-muted-foreground font-medium uppercase tracking-wide">
-                      {course.category} Certification
-                    </p>
-                   </div>
-                  {currentModuleIndex !== -1 && !isCurrentModuleCompleted && (
-                    <Button 
-                      onClick={() => handleMarkComplete(course.modules[currentModuleIndex].id)}
-                      className="gap-2 sm:w-fit"
-                    >
-                      <CheckCircle className="size-4" /> Mark Module Complete
-                    </Button>
-                  )}
-                  {isCurrentModuleCompleted && (
-                     <div className="flex items-center gap-2 text-green-600 bg-green-50 px-4 py-2 rounded-full text-sm font-semibold border border-green-100">
-                       <CheckCircle className="size-4" /> Module Completed
+              {!isFocusMode && (
+                <div className="bg-card border rounded-3xl p-6 lg:p-8 space-y-6 shadow-sm shrink-0">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                     <div className="space-y-1">
+                       <h2 className="text-2xl lg:text-3xl font-bold tracking-tight text-primary">
+                        {activeLesson?.title || course.title}
+                      </h2>
+                      <p className="text-sm text-muted-foreground font-medium uppercase tracking-wide">
+                        {course.category} Certification
+                      </p>
                      </div>
-                  )}
+                    {currentModuleIndex !== -1 && !isCurrentModuleCompleted && (
+                      <Button 
+                        onClick={() => handleMarkComplete(course.modules[currentModuleIndex].id)}
+                        className="gap-2 sm:w-fit"
+                      >
+                        <CheckCircle className="size-4" /> Mark Module Complete
+                      </Button>
+                    )}
+                    {isCurrentModuleCompleted && (
+                       <div className="flex items-center gap-2 text-green-600 bg-green-50 px-4 py-2 rounded-full text-sm font-semibold border border-green-100">
+                         <CheckCircle className="size-4" /> Module Completed
+                       </div>
+                    )}
+                  </div>
+                  <div className="prose prose-sm max-w-none text-muted-foreground leading-relaxed">
+                    {course.description}
+                  </div>
                 </div>
-                <div className="prose prose-sm max-w-none text-muted-foreground leading-relaxed">
-                  {course.description}
-                </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
@@ -218,4 +228,5 @@ export default function CourseDetailPage() {
     </SidebarProvider>
   )
 }
+
 

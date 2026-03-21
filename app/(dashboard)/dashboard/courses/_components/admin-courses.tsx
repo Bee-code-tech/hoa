@@ -23,6 +23,8 @@ export function AdminCoursesTable() {
     setIsSheetOpen(true)
   }
 
+  const data = (coursesData as any).default || coursesData
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -47,7 +49,7 @@ export function AdminCoursesTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {coursesData.map((course) => (
+            {Array.isArray(data) && data.map((course: any) => (
               <TableRow key={course.id}>
                 <TableCell className="font-medium">{course.title}</TableCell>
                 <TableCell>{course.category}</TableCell>

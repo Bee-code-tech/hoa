@@ -20,11 +20,15 @@ import {
 import coursesData from "../courses.json"
 
 export default function CourseDetailPage() {
-  const { slug } = useParams()
+  const params = useParams()
+  const slug = Array.isArray(params?.slug) ? params.slug[0] : params?.slug
   const router = useRouter()
   const contentRef = useRef<HTMLDivElement>(null)
   
-  const course = coursesData.find((c) => c.slug === slug)
+  // Robust data retrieval
+  const data = (coursesData as any).default || coursesData
+  const course = Array.isArray(data) ? data.find((c: any) => c.slug === slug) : null
+  
   const [activeLesson, setActiveLesson] = useState<any>(null)
   const [completedModules, setCompletedModules] = useState<string[]>([])
   const [isFocusMode, setIsFocusMode] = useState(false)
@@ -37,7 +41,15 @@ export default function CourseDetailPage() {
     }
   }, [course])
 
-  if (!course) return <div>Course not found</div>
+  if (!course) {
+    return (
+      <div className="flex h-screen items-center justify-center flex-col gap-4">
+        <h1 className="text-2xl font-bold text-primary">Course not found</h1>
+        <p className="text-muted-foreground">The requested course slug "{slug}" does not exist.</p>
+        <Button onClick={() => router.push("/dashboard/courses")}>Back to Courses</Button>
+      </div>
+    )
+  }
 
   const handleMarkComplete = (moduleId: string) => {
     const newCompleted = [...new Set([...completedModules, moduleId])]
@@ -60,7 +72,7 @@ export default function CourseDetailPage() {
     }
   }
 
-  const currentModuleIndex = course.modules.findIndex(m => m.lessons.some(l => l.id === activeLesson?.id))
+  const currentModuleIndex = course.modules.findIndex((m: any) => m.lessons.some((l: any) => l.id === activeLesson?.id))
   const isCurrentModuleCompleted = currentModuleIndex !== -1 && completedModules.includes(course.modules[currentModuleIndex].id)
 
   return (
@@ -92,7 +104,7 @@ export default function CourseDetailPage() {
               <div className="p-4 bg-card border rounded-2xl shadow-sm">
                 <h3 className="font-bold text-lg mb-4 px-2">Course Modules</h3>
                 <div className="space-y-6">
-                  {course.modules.map((module, index) => {
+                  {course.modules.map((module: any, index: number) => {
                     const locked = isModuleLocked(index)
                     const completed = completedModules.includes(module.id)
                     
@@ -105,7 +117,7 @@ export default function CourseDetailPage() {
                           {locked ? <Lock className="size-3 text-muted-foreground" /> : completed && <CheckCircle className="size-3 text-green-500" />}
                         </div>
                         <div className="space-y-1">
-                          {module.lessons.map((lesson) => (
+                          {module.lessons.map((lesson: any) => (
                             <button
                               key={lesson.id}
                               disabled={locked}
@@ -180,7 +192,7 @@ export default function CourseDetailPage() {
                   ) : (
                     <iframe
                       className="w-full h-full bg-white"
-                      src={`${activeLesson.content}#toolbar=1&navpanes=0&scrollbar=1`}
+                      src={`https://docs.google.com/viewer?url=${encodeURIComponent(activeLesson.content)}&embedded=true`}
                       title={activeLesson.title}
                     />
                   )

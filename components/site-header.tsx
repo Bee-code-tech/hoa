@@ -6,7 +6,7 @@ const data = {
   user: {
     name: "Admin",
     email: "admin@hoaservices.co.uk",
-    avatar: "/avatars/admin.jpg",
+    avatar: "https://ui-avatars.com/api/?name=Admin&background=002147&color=fff",
   },
 }
 

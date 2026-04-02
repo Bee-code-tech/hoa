@@ -1,6 +1,6 @@
 export type PaymentStatus = "pending" | "completed" | "failed";
 
-// infalii
+// infa
 export interface Payment {
   id: string;
   studentName: string;

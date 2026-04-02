@@ -1,5 +1,6 @@
 export type PaymentStatus = "pending" | "completed" | "failed";
 
+// infaliible 
 export interface Payment {
   id: string;
   studentName: string;

@@ -15,7 +15,8 @@ import {
   FileTextIcon, 
   Settings2Icon, 
   BellIcon,
-  BookOpenIcon
+  BookOpenIcon,
+  CreditCardIcon
 } from "lucide-react"
 
 import logo from "@/assets/logo-dark.png"
@@ -52,6 +53,11 @@ const data = {
       title: "Notifications",
       url: "/dashboard/notifications",
       icon: <BellIcon />,
+    },
+    {
+      title: "Payments",
+      url: "/dashboard/payments",
+      icon: <CreditCardIcon />,
     },
     {
       title: "Settings",

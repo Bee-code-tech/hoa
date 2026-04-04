@@ -50,6 +50,7 @@ export const metadata: Metadata = {
 };
 
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "react-hot-toast";
 
 export default function RootLayout({
   children,
@@ -61,6 +62,7 @@ export default function RootLayout({
       <body
         className={`${jakarta.variable} ${space.variable} antialiased`}
       >
+        <Toaster position="top-center" />
         <TooltipProvider>
           <Analytics />
           {children}

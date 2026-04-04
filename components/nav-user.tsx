@@ -5,6 +5,8 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
+import { useRouter } from "next/navigation"
+import { authUtils } from "@/lib/auth-utils"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,6 +34,12 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
+  const router = useRouter()
+
+  const handleLogout = () => {
+    authUtils.removeAuth()
+    router.push("/login")
+  }
 
   return (
     <SidebarMenu>
@@ -57,7 +65,7 @@ export function NavUser({
           </DropdownMenuTrigger>
           <DropdownMenuContent
             className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
-            side={isMobile ? "bottom" : "right"}
+            side="bottom"
             align="end"
             sideOffset={4}
           >
@@ -94,13 +102,14 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive">
               <LogOutIcon
               />
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+
       </SidebarMenuItem>
     </SidebarMenu>
   )

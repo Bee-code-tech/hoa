@@ -1,5 +1,13 @@
 "use client"
 
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod"
+import { useRouter } from "next/navigation"
+import { toast } from "react-hot-toast"
+import { Loader2, Eye, EyeOff } from "lucide-react"
+
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -17,36 +25,61 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
+import { authService } from "@/services/auth.service"
+import { authUtils } from "@/lib/auth-utils"
 
-import { useRouter } from "next/navigation"
+const formSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(1, "Password is required"),
+})
+
+type FormValues = z.infer<typeof formSchema>
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const formData = new FormData(e.currentTarget)
-    const email = formData.get("email") as string
-    const password = formData.get("password") as string
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  })
 
-    if (password === "password@123") {
-      const role = email === "admin@hoaservices.co.uk" ? "admin" : "student"
-      const name = email.split("@")[0].split(".")[0]
-      const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1)
+  const onSubmit = async (values: FormValues) => {
+    setIsLoading(true)
+    try {
+      const response = await authService.login(values)
+      toast.success("Login successful!")
       
-      const user = { 
-        email, 
-        role, 
-        name: capitalizedName,
-        avatar: `https://ui-avatars.com/api/?name=${capitalizedName}&background=002147&color=fff`
+      if (response.data) {
+        authUtils.setAuth(response.data.token, response.data.user)
+        
+        // Redirect based on user role
+        if (response.data.user.role === "student") {
+          router.push("/dashboard/my-courses")
+        } else {
+          router.push("/dashboard")
+        }
       }
-      localStorage.setItem("user", JSON.stringify(user))
-      router.push("/dashboard")
-    } else {
-      alert("Invalid credentials. Try password@123")
+    } catch (error: any) {
+      if (error.response?.status === 403) {
+        toast.error("Email not verified. Redirecting to verification...")
+        router.push(`/verify-otp?email=${encodeURIComponent(values.email)}`)
+      } else {
+        toast.error(error.response?.data?.message || "Invalid credentials")
+      }
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -60,17 +93,18 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
                   id="email"
-                  name="email"
                   type="email"
                   placeholder="m@example.com"
-                  required
+                  {...register("email")}
+                  className={errors.email ? "border-destructive" : ""}
                 />
+                {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
               </Field>
               <Field>
                 <div className="flex items-center">
@@ -82,16 +116,36 @@ export function LoginForm({
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" name="password" type="password" required />
+                <div className="relative">
+                  <Input 
+                    id="password" 
+                    type={showPassword ? "text" : "password"} 
+                    {...register("password")}
+                    className={cn(
+                      "pr-10",
+                      errors.password ? "border-destructive" : ""
+                    )}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                  </button>
+                </div>
+                {errors.password && <p className="text-xs text-destructive">{errors.password.message}</p>}
               </Field>
               <Field>
-                <Button type="submit" className="w-full">Login</Button>
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Login
+                </Button>
                 <Button variant="outline" type="button" className="w-full">
                   Login with Google
                 </Button>
                 <FieldDescription className="text-center">
-                  Don&apos;t have an account? <Link href="/signup">Sign up</Link>
-              
+                  Don&apos;t have an account? <Link href="/signup" className="underline underline-offset-4 hover:text-primary">Sign up</Link>
                 </FieldDescription>
               </Field>
             </FieldGroup>

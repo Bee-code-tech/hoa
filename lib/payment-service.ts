@@ -116,3 +116,21 @@ export const getPaymentStats = () => {
     totalAmount,
   };
 };
+
+export const createPayment = (paymentData: Omit<Payment, "id" | "status" | "date">): Payment => {
+  const payments = getPayments();
+  const newPayment: Payment = {
+    ...paymentData,
+    id: `PAY-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`,
+    status: "pending",
+    date: new Date().toISOString().split("T")[0],
+  };
+  
+  const updatedPayments = [newPayment, ...payments];
+  
+  if (typeof window !== "undefined") {
+    localStorage.setItem("payments", JSON.stringify(updatedPayments));
+  }
+  
+  return newPayment;
+};

@@ -17,7 +17,7 @@ import {
   Minimize2,
   ExternalLink
 } from "lucide-react"
-import coursesData from "../courses.json"
+import { courses as coursesData } from "@/data/courses"
 
 export default function CourseDetailPage() {
   const params = useParams()
@@ -26,8 +26,7 @@ export default function CourseDetailPage() {
   const contentRef = useRef<HTMLDivElement>(null)
   
   // Robust data retrieval
-  const data = (coursesData as any).default || coursesData
-  const course = Array.isArray(data) ? data.find((c: any) => c.slug === slug || c.id === slug) : null
+  const course = Array.isArray(coursesData) ? coursesData.find((c: any) => c.slug === slug || String(c.id) === slug) : null
   
   const [activeModule, setActiveModule] = useState<any>(null)
   const [completedModules, setCompletedModules] = useState<string[]>([])

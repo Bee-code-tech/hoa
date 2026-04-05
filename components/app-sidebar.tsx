@@ -88,7 +88,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader className="py-6 px-4">
-        <Link href="/dashboard" className="transition-opacity hover:opacity-80">
+        <Link href="/" className="transition-opacity hover:opacity-80">
           <img src={logo.src} alt="HOA Logo" className="h-12 w-auto object-contain" />
         </Link>
       </SidebarHeader>

@@ -5,7 +5,7 @@ import CourseCard from "@/components/CourseCard"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Search, Filter } from "lucide-react"
-import coursesData from "../courses.json"
+import { courses as coursesData } from "@/data/courses"
 
 interface StudentCourseGridProps {
   initialData?: any[]
@@ -16,7 +16,7 @@ export function StudentCourseGrid({ initialData, isPersonalView = false }: Stude
   const [searchQuery, setSearchQuery] = useState("")
   const [activeCategory, setActiveCategory] = useState("All")
 
-  const data = initialData || (coursesData as any).default || coursesData
+  const data = initialData || coursesData
   
   const categories = ["All", ...new Set(data.map((c: any) => c.category))]
 
@@ -86,6 +86,7 @@ export function StudentCourseGrid({ initialData, isPersonalView = false }: Stude
               badge={course.badge}
               progress={course.progress}
               showProgress={isPersonalView}
+              paymentStatus={course.paymentStatus ?? (isPersonalView ? "enrolled" : "none")}
             />
           ))}
         </div>

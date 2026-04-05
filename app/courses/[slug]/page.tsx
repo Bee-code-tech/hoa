@@ -8,8 +8,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { ArrowLeft, Clock, Users, CheckCircle, BookOpen, ShieldCheck, ArrowRight } from "lucide-react";
+import { ArrowLeft, Clock, Users, CheckCircle, BookOpen, ArrowRight } from "lucide-react";
 import CourseCard from "@/components/CourseCard";
+import EnrollButton from "@/components/EnrollButton";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
@@ -93,37 +94,25 @@ export default async function CourseDetailPage(props: { params: Promise<{ slug: 
                 <p className="leading-relaxed text-muted-foreground">{course.description}</p>
               </div>
 
-              {/* Syllabus */}
-              {course.syllabus && course.syllabus.length > 0 && (
+              {/* Course Curriculum */}
+              {course.modules && course.modules.length > 0 && (
                 <div className="mb-10">
-                  <h2 className="mb-4 text-2xl font-bold text-foreground">Course Syllabus</h2>
+                  <h2 className="mb-4 text-2xl font-bold text-foreground">Course Curriculum</h2>
                   <Accordion type="single" collapsible className="w-full">
-                    {course.syllabus.map((item, i) => (
-                      <AccordionItem key={i} value={`item-${i}`}>
+                    {course.modules.map((item: { id: string; title: string; type: string; content: string }, i: number) => (
+                      <AccordionItem key={item.id} value={`item-${i}`}>
                         <AccordionTrigger className="text-left text-sm font-semibold">
-                          {item.title}
+                          <span className="flex items-center gap-2">
+                            <BookOpen className="h-4 w-4 text-gold" />
+                            {item.title}
+                          </span>
                         </AccordionTrigger>
                         <AccordionContent className="text-muted-foreground">
-                          {item.content}
+                          Module {i + 1} — {item.type === "video" ? "Video Lesson" : "PDF Resource"}
                         </AccordionContent>
                       </AccordionItem>
                     ))}
                   </Accordion>
-                </div>
-              )}
-
-              {/* Requirements */}
-              {course.requirements && course.requirements.length > 0 && (
-                <div>
-                  <h2 className="mb-4 text-2xl font-bold text-foreground">Requirements</h2>
-                  <ul className="space-y-2">
-                    {course.requirements.map((req) => (
-                      <li key={req} className="flex items-start gap-2 text-sm text-muted-foreground">
-                        <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                        {req}
-                      </li>
-                    ))}
-                  </ul>
                 </div>
               )}
             </div>
@@ -134,9 +123,14 @@ export default async function CourseDetailPage(props: { params: Promise<{ slug: 
                 <p className="mb-1 text-3xl font-bold text-foreground">{course.price}</p>
                 <p className="mb-6 text-sm text-muted-foreground">Full course fee — no hidden costs</p>
 
-                <Button size="lg" className="mb-3 w-full gap-2 bg-gold text-foreground hover:bg-gold-light">
+                <EnrollButton
+                  courseTitle={course.title}
+                  coursePrice={course.price}
+                  size="lg"
+                  className="mb-3 w-full gap-2 bg-gold text-foreground hover:bg-gold-light"
+                >
                   Enrol Now <ArrowRight className="h-4 w-4" />
-                </Button>
+                </EnrollButton>
                 <Button size="lg" variant="outline" className="w-full border-muted-foreground/20">
                   Contact Us
                 </Button>

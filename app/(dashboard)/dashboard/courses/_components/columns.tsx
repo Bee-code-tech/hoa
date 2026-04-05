@@ -7,7 +7,7 @@ import { Edit2, Trash2, ExternalLink, MoreVertical } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 export interface CourseData {
-  id: string
+  id: number
   title: string
   slug: string
   category: string

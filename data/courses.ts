@@ -8,6 +8,7 @@ import courseConflict from "@/assets/course-conflict.jpg";
 
 export const courses = [
   {
+    id: 1,
     slug: "sia-door-supervisor",
     title: "SIA Door Supervisor Training",
     category: "Security",
@@ -17,27 +18,22 @@ export const courses = [
     image: courseDoor,
     badge: "Most Popular",
     description: "The SIA Door Supervisor course is the standard requirement for anyone looking to work as a security guard or door supervisor in the UK. This comprehensive training covers everything from behavioral standards to emergency procedures.",
-    syllabus: [
-      { title: "Unit 1: Working in the Private Security Industry", content: "Understanding the legal aspects, health and safety, and communication skills required for the role." },
-      { title: "Unit 2: Working as a Door Supervisor", content: "Behavioral standards, access control, and search procedures." },
-      { title: "Unit 3: Conflict Management", content: "Recognizing and defusing potentially violent situations safely." },
-      { title: "Unit 4: Physical Intervention", content: "Escorting and restrictive positioning skills as a last resort." }
-    ],
-    requirements: [
-      "Must be 18+ years of age",
-      "Valid identity documents",
-      "Level 1 English qualification",
-      "Emergency First Aid at Work certificate"
-    ],
     includes: [
       "SIA Accredited Certification",
       "Comprehensive Study Materials",
       "Physical Intervention Training",
       "Job Placement Support"
+    ],
+    modules: [
+      { id: "m1", title: "Working in the Private Security Industry", type: "video", content: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+      { id: "m2", title: "Working as a Door Supervisor", type: "pdf", content: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+      { id: "m3", title: "Conflict Management", type: "video", content: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+      { id: "m4", title: "Physical Intervention", type: "video", content: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
     ]
   },
   {
-    slug: "sia-door-supervisor",
+    id: 2,
+    slug: "sia-door-supervisor-refresher",
     title: "SIA Door Supervisor Refresher Course",
     category: "Security",
     duration: "6 Days",
@@ -45,27 +41,22 @@ export const courses = [
     price: "£0",
     image: courseSupervisor,
     badge: "Most Popular",
-    description: "The SIA Door Supervisor course is the standard requirement for anyone looking to work as a security guard or door supervisor in the UK. This comprehensive training covers everything from behavioral standards to emergency procedures.",
-    syllabus: [
-      { title: "Unit 1: Working in the Private Security Industry", content: "Understanding the legal aspects, health and safety, and communication skills required for the role." },
-      { title: "Unit 2: Working as a Door Supervisor", content: "Behavioral standards, access control, and search procedures." },
-      { title: "Unit 3: Conflict Management", content: "Recognizing and defusing potentially violent situations safely." },
-      { title: "Unit 4: Physical Intervention", content: "Escorting and restrictive positioning skills as a last resort." }
-    ],
-    requirements: [
-      "Must be 18+ years of age",
-      "Valid identity documents",
-      "Level 1 English qualification",
-      "Emergency First Aid at Work certificate"
-    ],
+    description: "The SIA Door Supervisor Refresher course is designed for existing license holders who need to renew their skills and stay compliant with the latest industry standards and regulations.",
     includes: [
       "SIA Accredited Certification",
       "Comprehensive Study Materials",
       "Physical Intervention Training",
       "Job Placement Support"
+    ],
+    modules: [
+      { id: "m1", title: "Updated Industry Regulations", type: "video", content: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+      { id: "m2", title: "Refresher: Behavioral Standards", type: "pdf", content: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+      { id: "m3", title: "Refresher: Conflict Management", type: "video", content: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+      { id: "m4", title: "Refresher: Physical Intervention", type: "video", content: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
     ]
   },
   {
+    id: 3,
     slug: "cctv-operator",
     title: "CCTV Operator Course",
     category: "Surveillance",
@@ -74,21 +65,19 @@ export const courses = [
     price: "£0",
     image: courseCctv,
     description: "Launch your career in surveillance with our SIA-accredited CCTV Operator course. Learn to monitor public spaces and private property using the latest technology.",
-    syllabus: [
-      { title: "Unit 1: Private Security Industry", content: "Legal framework and operational standards." },
-      { title: "Unit 2: CCTV Operations", content: "Camera controls, recording equipment, and surveillance techniques." }
-    ],
-    requirements: [
-      "Must be 18+ years of age",
-      "Clean criminal record (DBS check)"
-    ],
     includes: [
       "Professional Certification",
       "Hands-on equipment training",
       "Technical operational guide"
+    ],
+    modules: [
+      { id: "m1", title: "Principles of CCTV Systems", type: "video", content: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+      { id: "m2", title: "Privacy and GDPR", type: "pdf", content: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+      { id: "m3", title: "Detailed Note Taking", type: "pdf", content: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" }
     ]
   },
   {
+    id: 4,
     slug: "emergency-first-aid",
     title: "Emergency First Aid at Work",
     category: "First Aid",
@@ -98,18 +87,20 @@ export const courses = [
     image: courseFirstaid,
     badge: "Best Value",
     description: "Essential life-saving skills for any workplace. This one-day course is a prerequisite for many SIA licenses and is highly valued by employers.",
-    syllabus: [
-      { title: "Unit 1: Basic Life Support", content: "CPR, AED usage, and recovery position." },
-      { title: "Unit 2: Common Injuries", content: "Treating burns, fractures, and minor wounds." }
-    ],
-    requirements: ["None"],
     includes: [
       "HSE Recognized Certificate",
       "First Aid Manual",
       "Practical Skills Session"
+    ],
+    modules: [
+      { id: "m1", title: "Initial Assessment (DRSABCD)", type: "video", content: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+      { id: "m2", title: "CPR Techniques for Adults", type: "video", content: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+      { id: "m3", title: "Managing Major Trauma", type: "pdf", content: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+      { id: "m4", title: "Record Keeping & RIDDOR", type: "pdf", content: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" }
     ]
   },
   {
+    id: 5,
     slug: "close-protection",
     title: "Close Protection Officer",
     category: "Security",
@@ -118,21 +109,19 @@ export const courses = [
     price: "£0",
     image: courseCloseprotection,
     description: "Elite level training for high-threat environments. Become an executive protection specialist with our intensive 15-day residential program.",
-    syllabus: [
-      { title: "Advanced Tactics", content: "Route planning, threat assessment, and team movements." },
-      { title: "Executive Protection", content: "Protocol, etiquette, and high-net-worth client care." }
-    ],
-    requirements: [
-      "Background in security or military (recommended)",
-      "High level of physical fitness"
-    ],
     includes: [
       "Advanced Certification",
       "Scenario-based training",
       "Elite network access"
+    ],
+    modules: [
+      { id: "m1", title: "Advanced Tactics & Route Planning", type: "video", content: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+      { id: "m2", title: "Executive Protection Protocols", type: "pdf", content: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+      { id: "m3", title: "Threat Assessment", type: "video", content: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
     ]
   },
   {
+    id: 6,
     slug: "security-guard-refresher",
     title: "Security Guard Refresher",
     category: "Top-Up",
@@ -141,14 +130,17 @@ export const courses = [
     price: "£0",
     image: courseGuard,
     description: "Required 'Top-Up' training for existing license holders to ensure compliance with the latest industry standards.",
-    syllabus: [
-      { title: "Unit 1: Modern Threats", content: "Terrorism awareness and current security risks." },
-      { title: "Unit 2: Equipment Update", content: "Using body-worn cameras and digital reporting." }
+    includes: [
+      "License renewal eligibility",
+      "New standards manual"
     ],
-    requirements: ["Existing SIA Security License"],
-    includes: ["License renewal eligibility", "New standards manual"]
+    modules: [
+      { id: "m1", title: "Modern Threats & Terrorism Awareness", type: "video", content: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+      { id: "m2", title: "Equipment Update: Body-worn Cameras", type: "video", content: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+    ]
   },
   {
+    id: 7,
     slug: "conflict-management",
     title: "Conflict Management Training",
     category: "Security",
@@ -157,11 +149,14 @@ export const courses = [
     price: "£0",
     image: courseConflict,
     description: "Specialized training in verbal de-escalation and risk management. Essential for front-line security and hospitality staff.",
-    syllabus: [
-      { title: "Psychology of Conflict", content: "Understanding triggers and behavioral patterns." },
-      { title: "Verbal Judo", content: "Tactical communication and de-escalation scripts." }
+    includes: [
+      "Certification",
+      "Communication Toolkit"
     ],
-    requirements: ["None"],
-    includes: ["Certification", "Communication Toolkit"]
+    modules: [
+      { id: "m1", title: "Stress Response (Flight/Fight)", type: "video", content: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+      { id: "m2", title: "Strategic Communication", type: "pdf", content: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+      { id: "m3", title: "POPS Model", type: "video", content: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+    ]
   }
 ];

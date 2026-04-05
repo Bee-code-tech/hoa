@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/breadcrumb"
 import { ArrowLeft, BookOpen, LayoutList, Trophy, AlertTriangle } from "lucide-react"
 import Link from "next/link"
-import coursesData from "../../courses.json"
+import { courses as coursesData } from "@/data/courses"
 import { Badge } from "@/components/ui/badge"
 
 import TitleForm from "../../_components/modular/TitleForm"
@@ -45,8 +45,7 @@ export default function EditCoursePage() {
       const parsed = JSON.parse(saved)
       setCourse({ modules: [], ...parsed })
     } else {
-      const data = (coursesData as any).default || coursesData
-      const found = data.find((c: any) => c.slug === slug)
+      const found = coursesData.find((c: any) => c.slug === slug)
       if (found) {
         setCourse(found)
       } else {

@@ -1,7 +1,8 @@
 "use client";
 
-import { Home, BookOpen, MapPin, FileText, Phone, Menu, X, User } from "lucide-react";
+import { Home, BookOpen, MessageSquare, Phone, Menu, X, User } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import { authUtils } from "@/lib/auth-utils";
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/logo-icon.png";
 import gsap from "gsap";
@@ -11,17 +12,21 @@ import Link from "next/link";
 const navLinks = [
   { label: "Home", icon: Home, href: "#" },
   { label: "Courses", icon: BookOpen, href: "#courses" },
-  { label: "Locations", icon: MapPin, href: "#locations" },
-  { label: "Blog", icon: FileText, href: "#blog" },
+  { label: "Testimonials", icon: MessageSquare, href: "#testimonials" },
   { label: "Contact", icon: Phone, href: "/contact" },
 ];
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navRef = useRef<HTMLElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const timeline = useRef<gsap.core.Timeline | null>(null);
+
+  useEffect(() => {
+    setIsLoggedIn(authUtils.isAuthenticated());
+  }, []);
 
   useGSAP(() => {
     // Initial state: menu is zero height and invisible
@@ -90,14 +95,24 @@ const Navbar = () => {
           </div>
 
           <div className="hidden items-center gap-2 md:flex">
-            <Link href="/login">
-              <Button variant="ghost" size="sm" className="gap-1.5">
-                <User className="h-4 w-4" /> Sign In
-              </Button>
-            </Link>
-            <Link href="/login">
-              <Button size="sm">Get Started</Button>
-            </Link>
+            {!isLoggedIn ? (
+              <>
+                <Link href="/login">
+                  <Button variant="ghost" size="sm" className="gap-1.5">
+                    <User className="h-4 w-4" /> Sign In
+                  </Button>
+                </Link>
+                <Link href="/login">
+                  <Button size="sm">Get Started</Button>
+                </Link>
+              </>
+            ) : (
+              <Link href="/dashboard">
+                <Button size="sm" className="gap-1.5">
+                  <User className="h-4 w-4" /> Dashboard
+                </Button>
+              </Link>
+            )}
           </div>
 
           <button
@@ -123,14 +138,24 @@ const Navbar = () => {
               </a>
             ))}
             <div className="mobile-link flex gap-2 pt-2">
-              <Link href="/login" className="flex-1" onClick={() => setMobileOpen(false)}>
-                <Button variant="ghost" size="sm" className="w-full gap-1.5">
-                  <User className="h-4 w-4" /> Sign In
-                </Button>
-              </Link>
-              <Link href="/login" className="flex-1" onClick={() => setMobileOpen(false)}>
-                <Button size="sm" className="w-full">Get Started</Button>
-              </Link>
+              {!isLoggedIn ? (
+                <>
+                  <Link href="/login" className="flex-1" onClick={() => setMobileOpen(false)}>
+                    <Button variant="ghost" size="sm" className="w-full gap-1.5">
+                      <User className="h-4 w-4" /> Sign In
+                    </Button>
+                  </Link>
+                  <Link href="/login" className="flex-1" onClick={() => setMobileOpen(false)}>
+                    <Button size="sm" className="w-full">Get Started</Button>
+                  </Link>
+                </>
+              ) : (
+                <Link href="/dashboard" className="flex-1" onClick={() => setMobileOpen(false)}>
+                  <Button size="sm" className="w-full gap-1.5">
+                    <User className="h-4 w-4" /> Dashboard
+                  </Button>
+                </Link>
+              )}
             </div>
           </div>
         </div>

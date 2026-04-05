@@ -60,7 +60,7 @@ const TestimonialsSection = () => {
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} className="bg-card py-20 px-4">
+    <section ref={containerRef} id="testimonials" className="bg-card py-20 px-4">
       <div className="container mx-auto">
         <div className="testimonials-header mb-12 text-center">
           <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-gold">Testimonials</p>

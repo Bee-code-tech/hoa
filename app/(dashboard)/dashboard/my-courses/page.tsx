@@ -5,7 +5,7 @@ import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { StudentCourseGrid } from "../courses/_components/student-courses"
-import coursesData from "../courses/courses.json"
+import { courses as coursesData } from "@/data/courses"
 
 export default function MyCoursesPage() {
   const [role, setRole] = useState<string | null>(null)
@@ -16,8 +16,7 @@ export default function MyCoursesPage() {
   }, [])
 
   // Simulate enrolled courses (e.g. first two courses)
-  const allData = (coursesData as any).default || coursesData
-  const enrolledData = Array.isArray(allData) ? allData.slice(0, 2) : []
+  const enrolledData = coursesData.slice(0, 2)
 
   return (
     <SidebarProvider

@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 import { DataTable } from "../../_components/data-table"
 import { adminCourseColumns } from "./columns"
-import coursesData from "../courses.json"
+import { courses as coursesData } from "@/data/courses"
 
 export function AdminCoursesTable() {
   const router = useRouter()
-  const data = (coursesData as any).default || coursesData
+  const data = coursesData
 
   return (
     <div className="flex flex-col gap-8">

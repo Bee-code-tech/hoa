@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Pencil, X } from "lucide-react"
@@ -15,6 +15,10 @@ interface TitleFormProps {
 export default function TitleForm({ initialData, onSave }: TitleFormProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [value, setValue] = useState(initialData.title)
+
+  useEffect(() => {
+    setValue(initialData.title)
+  }, [initialData.title])
 
   const toggleEdit = () => setIsEditing((current) => !current)
 

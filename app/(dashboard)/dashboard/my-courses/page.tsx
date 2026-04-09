@@ -5,18 +5,31 @@ import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { StudentCourseGrid } from "../courses/_components/student-courses"
-import { courses as coursesData } from "@/data/courses"
+import { courseService, Course } from "@/services/course.service"
+import { Loader2 } from "lucide-react"
 
 export default function MyCoursesPage() {
   const [role, setRole] = useState<string | null>(null)
+  const [enrolledData, setEnrolledData] = useState<Course[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user") || '{"role": "student"}')
     setRole(user.role)
-  }, [])
 
-  // Simulate enrolled courses (e.g. first two courses)
-  const enrolledData = coursesData.slice(0, 2)
+    const fetchCourses = async () => {
+      try {
+        const data = await courseService.getCourses();
+        const enrolled = data.filter(c => ["enrolled", "paid", "confirmed"].includes(c.paymentStatus as string));
+        setEnrolledData(enrolled);
+      } catch (error) {
+        console.error("Failed to load enrolled courses:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchCourses();
+  }, [])
 
   return (
     <SidebarProvider
@@ -40,7 +53,14 @@ export default function MyCoursesPage() {
                  </p>
                </div>
                
-               <StudentCourseGrid initialData={enrolledData} isPersonalView={true} />
+               {isLoading || enrolledData.length > 0 ? (
+                 <StudentCourseGrid initialData={enrolledData} isPersonalView={true} isLoadingExternal={isLoading} />
+               ) : (
+                 <div className="text-center py-20 bg-muted/20 rounded-2xl border border-dashed border-muted-foreground/20">
+                   <h3 className="text-xl font-bold mb-2">No active enrollments yet.</h3>
+                   <p className="text-muted-foreground">Once your payment is confirmed, your courses will appear here.</p>
+                 </div>
+               )}
             </div>
           </div>
         </div>

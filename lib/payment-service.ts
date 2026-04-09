@@ -1,112 +1,48 @@
-export type PaymentStatus = "pending" | "completed" | "failed";
+import apiClient from "./axios";
 
-// infa
+export type PaymentStatus = "pending" | "confirmed" | "rejected";
+
 export interface Payment {
-  id: string;
-  studentName: string;
-  studentEmail: string;
-  courseTitle: string;
+  _id: string;
+  student: {
+    _id: string;
+    name: string;
+    email: string;
+  };
+  course: {
+    _id: string;
+    title: string;
+  };
   amount: number;
   status: PaymentStatus;
-  date: string;
+  transactionDate: string;
   receiptUrl: string;
+  rejectionReason?: string;
 }
 
-const MOCK_PAYMENTS: Payment[] = [
-  {
-    id: "PAY-001",
-    studentName: "John Doe",
-    studentEmail: "john@example.com",
-    courseTitle: "SIA Door Supervisor Training",
-    amount: 199,
-    status: "completed",
-    date: "2024-03-15",
-    receiptUrl: "/receipts/sample.pdf",
-  },
-  {
-    id: "PAY-002",
-    studentName: "Jane Smith",
-    studentEmail: "jane@example.com",
-    courseTitle: "CCTV Operator Course",
-    amount: 250,
-    status: "pending",
-    date: "2024-03-20",
-    receiptUrl: "/receipts/sample.pdf",
-  },
-  {
-    id: "PAY-003",
-    studentName: "Michael Brown",
-    studentEmail: "michael@example.com",
-    courseTitle: "Emergency First Aid at Work",
-    amount: 95,
-    status: "completed",
-    date: "2024-03-18",
-    receiptUrl: "/receipts/sample.pdf",
-  },
-  {
-    id: "PAY-004",
-    studentName: "Emily Davis",
-    studentEmail: "emily@example.com",
-    courseTitle: "SIA Door Supervisor Training",
-    amount: 199,
-    status: "pending",
-    date: "2024-03-22",
-    receiptUrl: "/receipts/sample.pdf",
-  },
-  {
-    id: "PAY-005",
-    studentName: "Chris Wilson",
-    studentEmail: "chris@example.com",
-    courseTitle: "Close Protection Officer",
-    amount: 1200,
-    status: "completed",
-    date: "2024-03-10",
-    receiptUrl: "/receipts/sample.pdf",
-  },
-  {
-    id: "PAY-006",
-    studentName: "Sarah Miller",
-    studentEmail: "sarah@example.com",
-    courseTitle: "CCTV Operator Course",
-    amount: 250,
-    status: "pending",
-    date: "2024-03-21",
-    receiptUrl: "/receipts/sample.pdf",
-  },
-  {
-    id: "PAY-007",
-    studentName: "David Taylor",
-    studentEmail: "david@example.com",
-    courseTitle: "Conflict Management Training",
-    amount: 85,
-    status: "completed",
-    date: "2024-03-12",
-    receiptUrl: "/receipts/sample.pdf",
-  },
-];
+export interface PaymentSubmission {
+  courseId: string;
+  receiptUrl: string;
+  amount: number;
+}
 
-export const getPayments = (): Payment[] => {
-  if (typeof window !== "undefined") {
-    const stored = localStorage.getItem("payments");
-    if (stored) return JSON.parse(stored);
-    localStorage.setItem("payments", JSON.stringify(MOCK_PAYMENTS));
-  }
-  return MOCK_PAYMENTS;
+export const getPayments = async (): Promise<Payment[]> => {
+  const response = await apiClient.get("/payments");
+  return response.data.data;
 };
 
-export const updatePaymentStatus = (id: string, status: PaymentStatus): void => {
-  const payments = getPayments();
-  const updated = payments.map((p) => (p.id === id ? { ...p, status } : p));
-  localStorage.setItem("payments", JSON.stringify(updated));
+export const updatePaymentStatus = async (id: string, status: "confirmed" | "rejected", rejectionReason?: string): Promise<Payment> => {
+  const response = await apiClient.patch(`/payments/${id}/process`, { status, rejectionReason });
+  return response.data.data;
 };
 
-export const getPaymentStats = () => {
-  const payments = getPayments();
+export const getPaymentStats = async () => {
+  const payments = await getPayments();
   const totalRevenue = payments
-    .filter((p) => p.status === "completed")
+    .filter((p) => p.status === "confirmed")
     .reduce((sum, p) => sum + p.amount, 0);
   const pendingCount = payments.filter((p) => p.status === "pending").length;
-  const completedCount = payments.filter((p) => p.status === "completed").length;
+  const completedCount = payments.filter((p) => p.status === "confirmed").length;
   const totalAmount = payments.reduce((sum, p) => sum + p.amount, 0);
 
   return {
@@ -117,20 +53,7 @@ export const getPaymentStats = () => {
   };
 };
 
-export const createPayment = (paymentData: Omit<Payment, "id" | "status" | "date">): Payment => {
-  const payments = getPayments();
-  const newPayment: Payment = {
-    ...paymentData,
-    id: `PAY-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`,
-    status: "pending",
-    date: new Date().toISOString().split("T")[0],
-  };
-  
-  const updatedPayments = [newPayment, ...payments];
-  
-  if (typeof window !== "undefined") {
-    localStorage.setItem("payments", JSON.stringify(updatedPayments));
-  }
-  
-  return newPayment;
+export const createPayment = async (paymentData: PaymentSubmission): Promise<Payment> => {
+  const response = await apiClient.post("/payments/submit-receipt", paymentData);
+  return response.data.data;
 };

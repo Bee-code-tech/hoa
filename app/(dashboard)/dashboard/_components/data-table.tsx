@@ -82,7 +82,7 @@ interface DataTableProps<TData, TValue> {
 
 function DraggableRow<TData>({ row }: { row: Row<TData> }) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
-    id: (row.original as any).id,
+    id: (row.original as any)._id || (row.original as any).id,
   })
 
   return (
@@ -112,7 +112,13 @@ export function DataTable<TData, TValue>({
   addLabel,
   onAdd
 }: DataTableProps<TData, TValue>) {
-  const [data, setData] = React.useState(() => initialData)
+  const [data, setData] = React.useState<TData[]>(initialData)
+  
+  // Sync internal state when prop changes (essential for async data)
+  React.useEffect(() => {
+    setData(initialData)
+  }, [initialData])
+
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
@@ -133,7 +139,7 @@ export function DataTable<TData, TValue>({
   )
 
   const dataIds = React.useMemo<UniqueIdentifier[]>(
-    () => (data as any[]).map(({ id }) => id) || [],
+    () => (data as any[]).map((row) => row._id || row.id) || [],
     [data]
   )
 
@@ -149,7 +155,7 @@ export function DataTable<TData, TValue>({
       globalFilter,
     },
     onGlobalFilterChange: setGlobalFilter,
-    getRowId: (row: any) => row.id.toString(),
+    getRowId: (row: any) => (row._id || row.id).toString(),
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,

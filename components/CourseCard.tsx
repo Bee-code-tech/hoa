@@ -13,8 +13,8 @@ interface CourseCardProps {
   category: string;
   duration: string;
   students: string;
-  price: string;
-  image: string | { src: string };
+  price: number;
+  imageUrl: string;
   badge?: string;
   progress?: number;
   // Legacy prop — still supported for the landing page (no auth context)
@@ -30,17 +30,14 @@ const CourseCard = ({
   duration,
   students,
   price,
-  image,
+  imageUrl,
   badge,
   progress,
   showProgress,
   paymentStatus,
 }: CourseCardProps) => {
-  const imageSrc = typeof image === "string" ? image : image.src;
-
-  const isFree = parseFloat(price.replace(/[^0-9.]/g, "")) === 0;
+  const isFree = price === 0;
   let destination: string;
-  let isClickable = true;
 
   if (paymentStatus === "enrolled" || (showProgress && !paymentStatus)) {
     // Student has paid and been confirmed → go to course player
@@ -48,7 +45,6 @@ const CourseCard = ({
   } else if (paymentStatus === "pending") {
     // Awaiting admin review → not clickable to course player
     destination = `/courses/${slug}`;
-    isClickable = false;
   } else if (paymentStatus === "none") {
     // Dashboard context, not enrolled. Free courses can be started immediately.
     destination = isFree ? `/dashboard/courses/${slug}` : `/courses/${slug}`;
@@ -82,8 +78,6 @@ const CourseCard = ({
 
     // 3. Free Course (not enrolled yet)
     if (isFree) {
-      // In dashboard context (paymentStatus exists), show Start Course.
-      // On landing page (paymentStatus undefined), show Enroll Now.
       const label = paymentStatus ? "Start Course" : "Enroll Now";
       return (
         <Button variant="default" size="sm" className="gap-1 bg-primary">
@@ -106,7 +100,7 @@ const CourseCard = ({
     <div className="group relative block overflow-hidden rounded-xl border bg-card transition-all hover:shadow-lg hover:-translate-y-1 h-full flex flex-col">
       <div className="relative h-48 overflow-hidden shrink-0">
         <img
-          src={imageSrc}
+          src={imageUrl}
           alt={title}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
@@ -158,7 +152,7 @@ const CourseCard = ({
 
         <div className="mt-auto flex items-center justify-between pt-4">
           <span className="text-xl font-bold text-foreground">
-            {isFree ? "Free" : price}
+            {isFree ? "Free" : `£${price}`}
           </span>
           {ctaButton}
         </div>

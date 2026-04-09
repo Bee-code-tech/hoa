@@ -21,15 +21,36 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "No file uploaded" }, { status: 400 });
     }
 
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const uniqueName = `receipts/${Date.now()}-${file.name.replace(/\s+/g, "_")}`;
-    
+    const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB
+    if (file.size > MAX_FILE_SIZE) {
+      return NextResponse.json({ message: "File too large. Max size is 20MB" }, { status: 400 });
+    }
+
+    const uniqueName = `hoa-course-images/${Date.now()}-${file.name.replace(/\s+/g, "_")}`;
     const bucket = storage.bucket(bucketName);
     const fileNode = bucket.file(uniqueName);
 
-    await fileNode.save(buffer, {
+    // Use streaming for better performance with larger files
+    const stream = fileNode.createWriteStream({
+      resumable: false, // Recommended for smaller files to avoid overhead
       contentType: file.type,
+      // Removed 'public: true' to support buckets with uniform bucket-level access
     });
+
+    const uploadPromise = new Promise((resolve, reject) => {
+      stream.on('error', (err) => reject(err));
+      stream.on('finish', () => resolve(true));
+    });
+
+    const readable = (file as any).stream(); // Web stream
+    for await (const chunk of readable) {
+      stream.write(chunk);
+    }
+    stream.end();
+
+    await uploadPromise;
+    
+    
     
     const publicUrl = `https://storage.googleapis.com/${bucketName}/${uniqueName}`;
 

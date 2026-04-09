@@ -19,7 +19,9 @@ import {
   BookOpenIcon, 
   CreditCardIcon,
   CalendarIcon,
-  FileTextIcon
+  FileTextIcon,
+  ExternalLink,
+  Loader2
 } from "lucide-react"
 import { toast } from "sonner"
 
@@ -36,21 +38,35 @@ export function PaymentDetailModal({
   onClose,
   onUpdate 
 }: PaymentDetailModalProps) {
+  const [isProcessing, setIsProcessing] = React.useState(false);
   if (!payment) return null
 
-  const handleAction = (status: "completed" | "failed") => {
-    updatePaymentStatus(payment.id, status)
-    toast.success(`Payment ${status === "completed" ? "confirmed" : "rejected"} successfully`)
-    if (onUpdate) onUpdate()
-    onClose()
-    // Mock refresh
-    setTimeout(() => window.location.reload(), 500)
+  const handleAction = async (status: "confirmed" | "rejected") => {
+    try {
+      setIsProcessing(true);
+      await updatePaymentStatus(payment._id, status)
+      toast.success(`Payment ${status === "confirmed" ? "confirmed" : "rejected"} successfully`)
+      if (onUpdate) onUpdate()
+      onClose()
+      // Refresh data via parent state instead of reload if possible, 
+      // but the parent currently uses a refresh callback through onUpdate
+    } catch (error) {
+       toast.error("Failed to process payment");
+    } finally {
+       setIsProcessing(false);
+    }
   }
 
   const formattedAmount = new Intl.NumberFormat("en-GB", {
     style: "currency",
     currency: "GBP",
   }).format(payment.amount)
+
+  const formattedDate = payment.transactionDate ? new Date(payment.transactionDate).toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric"
+  }) : "N/A";
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -77,14 +93,14 @@ export function PaymentDetailModal({
               <span className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-1">
                 <UserIcon className="size-3" /> Student Name
               </span>
-              <p className="text-sm font-semibold text-foreground">{payment.studentName}</p>
-              <p className="text-xs text-muted-foreground">{payment.studentEmail}</p>
+              <p className="text-sm font-semibold text-foreground">{payment.student?.name || "Unknown"}</p>
+              <p className="text-xs text-muted-foreground">{payment.student?.email || "No email"}</p>
             </div>
             <div className="space-y-1 text-right">
               <span className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-1 justify-end">
                 <CalendarIcon className="size-3" /> Submission Date
               </span>
-              <p className="text-sm font-semibold text-foreground">{payment.date}</p>
+              <p className="text-sm font-semibold text-foreground">{formattedDate}</p>
             </div>
           </div>
 
@@ -95,7 +111,7 @@ export function PaymentDetailModal({
                 <span className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-1">
                   <BookOpenIcon className="size-3" /> Course Selected
                 </span>
-                <p className="text-sm font-bold text-foreground leading-tight">{payment.courseTitle}</p>
+                <p className="text-sm font-bold text-foreground leading-tight">{payment.course?.title || "N/A"}</p>
               </div>
               <div className="text-right">
                 <span className="text-[10px] uppercase font-bold text-muted-foreground">Amount Paid</span>
@@ -110,16 +126,25 @@ export function PaymentDetailModal({
               <FileTextIcon className="size-3" /> Payment Receipt Preview
             </span>
             <div className="aspect-video w-full rounded-2xl border-2 border-dashed border-muted-foreground/20 bg-muted/30 flex items-center justify-center relative overflow-hidden group">
-              {/* Mock Receipt Image */}
-              <img 
-                src="https://images.unsplash.com/photo-1554224155-1696413575b8?auto=format&fit=crop&q=80&w=800" 
-                alt="Receipt Placeholder"
-                className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity"
-              />
-              <div className="relative z-10 bg-white/90 dark:bg-black/80 px-4 py-2 rounded-full border border-primary/20 shadow-sm flex items-center gap-2">
-                 <FileTextIcon className="size-4 text-primary" />
-                 <span className="text-xs font-bold">{payment.id}_receipt.jpg</span>
-              </div>
+              {/* Actual Receipt Image */}
+              {payment.receiptUrl ? (
+                <img 
+                  src={payment.receiptUrl} 
+                  alt="Payment Receipt"
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform"
+                />
+              ) : (
+                <div className="flex flex-col items-center gap-1 text-muted-foreground">
+                  <FileTextIcon className="size-8" />
+                  <span className="text-xs">No receipt uploaded</span>
+                </div>
+              )}
+              {payment.receiptUrl && (
+                <div className="relative z-10 bg-white/90 dark:bg-black/80 px-4 py-2 rounded-full border border-primary/20 shadow-sm flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                   <ExternalLink className="size-4 text-primary" />
+                   <a href={payment.receiptUrl} target="_blank" className="text-xs font-bold hover:underline">View Full Receipt</a>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -128,18 +153,18 @@ export function PaymentDetailModal({
           <Button 
             variant="outline" 
             className="flex-1 sm:flex-none rounded-xl border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
-            onClick={() => handleAction("failed")}
-            disabled={payment.status !== "pending"}
+            onClick={() => handleAction("rejected")}
+            disabled={payment.status !== "pending" || isProcessing}
           >
-            <XCircleIcon className="size-4 mr-2" />
+            {isProcessing ? <Loader2 className="size-4 animate-spin" /> : <XCircleIcon className="size-4 mr-2" />}
             Reject
           </Button>
           <Button 
             className="flex-1 sm:flex-none rounded-xl bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-600/20"
-            onClick={() => handleAction("completed")}
-            disabled={payment.status !== "pending"}
+            onClick={() => handleAction("confirmed")}
+            disabled={payment.status !== "pending" || isProcessing}
           >
-            <CheckCircle2Icon className="size-4 mr-2" />
+            {isProcessing ? <Loader2 className="size-4 animate-spin" /> : <CheckCircle2Icon className="size-4 mr-2" />}
             Confirm Payment
           </Button>
         </DialogFooter>

@@ -29,56 +29,70 @@ import ImageForm from "../../_components/modular/ImageForm"
 import PriceForm from "../../_components/modular/PriceForm"
 import ChaptersForm from "../../_components/modular/ChaptersForm"
 import Actions from "../../_components/modular/Actions"
+import { courseService, Course, Chapter } from "@/services/course.service"
+import { toast } from "react-hot-toast"
 
 export default function EditCoursePage() {
   const router = useRouter()
   const params = useParams()
   const slug = params.slug as string
   
-  const [course, setCourse] = useState<any>(null)
+  const [course, setCourse] = useState<Course | null>(null)
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
     setIsMounted(true)
-    const saved = localStorage.getItem(`edit-course-${slug}`)
-    if (saved) {
-      const parsed = JSON.parse(saved)
-      setCourse({ modules: [], ...parsed })
-    } else {
-      const found = coursesData.find((c: any) => c.slug === slug)
-      if (found) {
-        setCourse(found)
-      } else {
+    const fetchCourse = async () => {
+      try {
+        const data = await courseService.getCourse(slug)
+        setCourse(data)
+      } catch (error) {
+        toast.error("Failed to load course")
         router.push("/dashboard/courses")
       }
     }
-  }, [slug])
+    fetchCourse()
+  }, [slug, router])
 
-  const updateCourse = (updates: any) => {
-    const newCourse = { ...course, ...updates }
-    setCourse(newCourse)
-    localStorage.setItem(`edit-course-${slug}`, JSON.stringify(newCourse))
+  const updateCourse = async (updates: Partial<Course>) => {
+    const courseId = course?.id || course?._id
+    if (!courseId) {
+      console.error("No course ID found for update", course)
+      toast.error("Error: Course identification failed")
+      return
+    }
+
+    try {
+      console.log("Updating course", courseId, updates)
+      const updated = await courseService.updateCourse(courseId, updates)
+      setCourse(updated)
+      toast.success("Course updated")
+    } catch (error) {
+      console.error("Update failed", error)
+      toast.error("Failed to update course")
+    }
   }
 
   const onAddChapter = (title: string) => {
-    const newChapter = {
+    if (!course) return
+    const newChapter: Chapter = {
       id: Math.random().toString(36).substr(2, 9),
       title,
       isPublished: false,
       isFree: false,
       type: "video" as const,
-      content: ""
+      content: "",
+      position: (course.chapters || []).length
     }
-    const newModules = [...(course.modules || []), newChapter]
-    updateCourse({ modules: newModules })
+    updateCourse({ chapters: [...(course.chapters || []), newChapter] })
   }
 
-  const onReorderChapters = (updateData: any) => {
-    updateCourse({ modules: [...course.modules] })
+  const onReorderChapters = (chapters: Chapter[]) => {
+    updateCourse({ chapters })
   }
 
   const onEditChapter = (id: string) => {
-    router.push(`/dashboard/courses/new/modules/${id}`)
+    router.push(`/dashboard/courses/${slug}/modules/${id}`)
   }
 
   if (!isMounted || !course) return null
@@ -86,10 +100,10 @@ export default function EditCoursePage() {
   const requiredFields = [
     course.title,
     course.description,
-    course.image,
+    course.imageUrl,
     course.category,
-    course.price,
-    course.modules?.some((m: any) => m.isPublished)
+    course.price !== undefined,
+    (course.chapters || []).some((c: any) => c.isPublished)
   ]
 
   const totalFields = requiredFields.length
@@ -151,11 +165,17 @@ export default function EditCoursePage() {
             </div>
             <Actions 
                disabled={!isComplete} 
-               isPublished={course.isPublished} 
-               onPublish={() => updateCourse({ isPublished: !course.isPublished })}
-               onDelete={() => {
-                  localStorage.removeItem(`edit-course-${slug}`)
-                  router.push("/dashboard/courses")
+               isPublished={!!course.isPublished} 
+               onPublish={async () => {
+                  await updateCourse({ isPublished: !course.isPublished })
+               }}
+               onDelete={async () => {
+                  const courseId = course.id || course._id
+                  if (courseId) {
+                    await courseService.deleteCourse(courseId)
+                    toast.success("Course deleted")
+                    router.push("/dashboard/courses")
+                  }
                }}
             />
           </div>
@@ -170,16 +190,16 @@ export default function EditCoursePage() {
               </div>
               
               <TitleForm 
-                initialData={course} 
+                initialData={{ title: course.title || "" }} 
                 onSave={(title) => updateCourse({ title })} 
               />
               <DescriptionForm 
-                initialData={course} 
+                initialData={{ description: course.description || "" }} 
                 onSave={(description) => updateCourse({ description })} 
               />
               <ImageForm 
-                initialData={course} 
-                onSave={(image) => updateCourse({ image })} 
+                initialData={{ imageUrl: course.imageUrl || "" }} 
+                onSave={(imageUrl) => updateCourse({ imageUrl })} 
               />
             </div>
 
@@ -192,9 +212,32 @@ export default function EditCoursePage() {
                     <h2 className="text-xl font-semibold">Course Curriculum</h2>
                   </div>
                   <ChaptersForm 
-                    initialData={{ chapters: course.modules || [] }} 
-                    onAdd={onAddChapter}
-                    onReorder={onReorderChapters}
+                    initialData={{ 
+                      chapters: (course.chapters || []).map(c => ({
+                        id: c.id || c._id || "",
+                        title: c.title,
+                        isPublished: !!c.isPublished,
+                        position: c.position,
+                        type: c.type,
+                        content: c.content,
+                        isFree: !!c.isFree
+                      }))
+                    }} 
+                    onSave={(chapters) => {
+                      // Remove temp IDs and align with backend schema
+                      const sanitized = chapters.map((chapter, index) => {
+                        const { id, ...rest } = chapter;
+                        return {
+                          ...rest,
+                          content: rest.content || " ", // Provide non-empty placeholder
+                          position: index + 1, // Backend expects 1-indexed
+                          isPublished: !!rest.isPublished,
+                          isFree: !!rest.isFree,
+                          ...(id.startsWith('temp-') ? {} : { id })
+                        };
+                      });
+                      updateCourse({ chapters: sanitized as Chapter[] })
+                    }}
                     onEdit={onEditChapter}
                   />
                </div>
@@ -207,11 +250,11 @@ export default function EditCoursePage() {
                     <h2 className="text-xl font-semibold">Pricing and category</h2>
                   </div>
                   <PriceForm 
-                    initialData={course} 
+                    initialData={{ price: course.price || 0 }} 
                     onSave={(price) => updateCourse({ price })} 
                   />
                   <CategoryForm 
-                    initialData={course} 
+                    initialData={{ category: course.category || "" }} 
                     onSave={(category) => updateCourse({ category })} 
                   />
                </div>

@@ -4,23 +4,45 @@ import { useState } from "react"
 import CourseCard from "@/components/CourseCard"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { Skeleton } from "@/components/ui/skeleton"
 import { Search, Filter } from "lucide-react"
-import { courses as coursesData } from "@/data/courses"
+import { courseService, Course } from "@/services/course.service"
+import { useEffect } from "react"
+import { toast } from "react-hot-toast"
 
 interface StudentCourseGridProps {
-  initialData?: any[]
+  initialData?: Course[]
   isPersonalView?: boolean
+  isLoadingExternal?: boolean
 }
 
-export function StudentCourseGrid({ initialData, isPersonalView = false }: StudentCourseGridProps) {
+export function StudentCourseGrid({ initialData, isPersonalView = false, isLoadingExternal = false }: StudentCourseGridProps) {
+  const [courses, setCourses] = useState<Course[]>(initialData || [])
+  const [isLoading, setIsLoading] = useState(!initialData)
   const [searchQuery, setSearchQuery] = useState("")
   const [activeCategory, setActiveCategory] = useState("All")
 
-  const data = initialData || coursesData
-  
-  const categories = ["All", ...new Set(data.map((c: any) => c.category))]
+  useEffect(() => {
+    if (!initialData) {
+      const fetchCourses = async () => {
+        try {
+          const data = await courseService.getCourses()
+          setCourses(data)
+        } catch (error) {
+          toast.error("Failed to fetch courses")
+        } finally {
+          setIsLoading(false)
+        }
+      }
+      fetchCourses()
+    } else {
+      setCourses(initialData)
+    }
+  }, [initialData])
 
-  const filteredCourses = data.filter((course: any) => {
+  const categories = ["All", ...new Set(courses.map((c: Course) => c.category))]
+  
+  const filteredCourses = courses.filter((course: Course) => {
     const matchesSearch = course.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
                          course.description?.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesCategory = activeCategory === "All" || course.category === activeCategory
@@ -44,7 +66,7 @@ export function StudentCourseGrid({ initialData, isPersonalView = false }: Stude
               placeholder="Search courses..." 
               className="pl-10 h-12 bg-card border-muted-foreground/20 rounded-xl shadow-sm focus:ring-gold"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
             />
           </div>
         </div>
@@ -54,7 +76,7 @@ export function StudentCourseGrid({ initialData, isPersonalView = false }: Stude
         <div className="flex items-center gap-2 mr-4 text-primary font-semibold text-sm">
           <Filter className="size-4" /> Filter by:
         </div>
-        {categories.map((category: any) => (
+        {categories.map((category: string) => (
           <Button
             key={category}
             variant={activeCategory === category ? "default" : "outline"}
@@ -71,22 +93,40 @@ export function StudentCourseGrid({ initialData, isPersonalView = false }: Stude
         ))}
       </div>
 
-      {filteredCourses.length > 0 ? (
+      {isLoading || isLoadingExternal ? (
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredCourses.map((course: any) => (
+          {Array.from({ length: 6 }).map((_, i) => (
+             <div key={i} className="rounded-2xl border bg-card p-5 space-y-4 h-[400px]">
+               <Skeleton className="h-48 w-full rounded-xl" />
+               <Skeleton className="h-4 w-1/4" />
+               <Skeleton className="h-6 w-3/4" />
+               <div className="flex gap-4">
+                 <Skeleton className="h-4 w-1/4" />
+                 <Skeleton className="h-4 w-1/4" />
+               </div>
+               <div className="flex justify-between items-center pt-4 mt-auto">
+                 <Skeleton className="h-8 w-20" />
+                 <Skeleton className="h-10 w-32" />
+               </div>
+             </div>
+          ))}
+        </div>
+      ) : filteredCourses.length > 0 ? (
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {filteredCourses.map((course: Course) => (
             <CourseCard
-              key={course.id}
-              slug={course.slug}
+              key={course.id || course.slug}
+              slug={course.slug || ""}
               title={course.title}
               category={course.category}
-              duration={course.duration}
-              students={course.students}
+              duration={course.duration || "Self-paced"}
+              students={course.students || "0"}
               price={course.price}
-              image={course.image}
+              imageUrl={course.imageUrl || "/images/placeholder.jpg"}
               badge={course.badge}
               progress={course.progress}
               showProgress={isPersonalView}
-              paymentStatus={course.paymentStatus ?? (isPersonalView ? "enrolled" : "none")}
+              paymentStatus={(course as any).paymentStatus ?? (isPersonalView ? "enrolled" : "none")}
             />
           ))}
         </div>
@@ -96,7 +136,7 @@ export function StudentCourseGrid({ initialData, isPersonalView = false }: Stude
            <h3 className="text-xl font-bold text-primary">No courses found</h3>
            <p className="text-muted-foreground">Try adjusting your search or category filters.</p>
            <Button variant="link" className="text-gold mt-2" onClick={() => {setSearchQuery(""); setActiveCategory("All");}}>
-             Clear all filters
+              Clear all filters
            </Button>
         </div>
       )}

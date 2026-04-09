@@ -6,26 +6,44 @@ import { SiteHeader } from "@/components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { SectionCards, SectionCardItem } from "../_components/section-cards"
 import { DataTable } from "../_components/data-table"
-import { paymentColumns } from "./_components/payment-columns"
-import { getPayments, getPaymentStats } from "@/lib/payment-service"
+import { getPaymentColumns } from "./_components/payment-columns"
+import { getPayments, getPaymentStats, Payment } from "@/lib/payment-service"
 import { 
   IconCreditCard, 
   IconTrendingUp, 
   IconClock, 
-  IconCheck 
+  IconCheck,
+  IconLoader2
 } from "@tabler/icons-react"
 
 export default function PaymentsPage() {
-  const [payments, setPayments] = React.useState(getPayments())
-  const [stats, setStats] = React.useState(getPaymentStats())
+  const [payments, setPayments] = React.useState<Payment[]>([])
+  const [stats, setStats] = React.useState<any>(null)
+  const [isLoading, setIsLoading] = React.useState(true)
 
-  React.useEffect(() => {
-    // Refresh data from localStorage on mount
-    setPayments(getPayments())
-    setStats(getPaymentStats())
+  const fetchData = React.useCallback(async () => {
+    try {
+      setIsLoading(true)
+      const [fetchedPayments, fetchedStats] = await Promise.all([
+        getPayments(),
+        getPaymentStats()
+      ])
+      setPayments(fetchedPayments)
+      setStats(fetchedStats)
+    } catch (error) {
+      console.error("Failed to fetch payments:", error)
+    } finally {
+      setIsLoading(false)
+    }
   }, [])
 
-  const statItems: SectionCardItem[] = [
+  React.useEffect(() => {
+    fetchData()
+  }, [fetchData])
+
+  const columns = React.useMemo(() => getPaymentColumns(fetchData), [fetchData])
+
+  const statItems: SectionCardItem[] = stats ? [
     {
       label: "Total Revenue",
       value: `£${stats.totalRevenue.toLocaleString()}`,
@@ -55,7 +73,7 @@ export default function PaymentsPage() {
       description: "Total of all payment attempts",
       footerLabel: "Includes pending and failed"
     }
-  ]
+  ] : []
 
   return (
     <SidebarProvider
@@ -80,22 +98,31 @@ export default function PaymentsPage() {
                 </p>
               </div>
 
-              <SectionCards items={statItems} />
+              {isLoading ? (
+                <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+                  <IconLoader2 className="size-10 text-primary animate-spin" />
+                  <p className="text-muted-foreground animate-pulse">Loading transaction records...</p>
+                </div>
+              ) : (
+                <>
+                  <SectionCards items={statItems} />
 
-              <div className="flex flex-col gap-2 px-4 lg:px-6 mt-4">
-                <h2 className="text-2xl font-bold tracking-tight">Transactions</h2>
-                <p className="text-muted-foreground text-sm">
-                  A history of all payment attempts and their current verification status.
-                </p>
-              </div>
+                  <div className="flex flex-col gap-2 px-4 lg:px-6 mt-4">
+                    <h2 className="text-2xl font-bold tracking-tight">Transactions</h2>
+                    <p className="text-muted-foreground text-sm">
+                      A history of all payment attempts and their current verification status.
+                    </p>
+                  </div>
 
-              <div className="px-4 lg:px-6 pb-20 overflow-hidden min-h-[600px]">
-                <DataTable 
-                  columns={paymentColumns} 
-                  data={payments} 
-                  searchPlaceholder="Search by student or course..." 
-                />
-              </div>
+                  <div className="px-4 lg:px-6 pb-20 overflow-hidden min-h-[600px]">
+                    <DataTable 
+                      columns={columns} 
+                      data={payments} 
+                      searchPlaceholder="Search by student or course..." 
+                    />
+                  </div>
+                </>
+              )}
 
             </div>
           </div>

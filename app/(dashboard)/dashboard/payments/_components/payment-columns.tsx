@@ -21,7 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-const ActionCell = ({ payment }: { payment: Payment }) => {
+const ActionCell = ({ payment, onUpdate }: { payment: Payment; onUpdate?: () => void }) => {
   const [showDetailModal, setShowDetailModal] = React.useState(false)
 
   return (
@@ -57,28 +57,29 @@ const ActionCell = ({ payment }: { payment: Payment }) => {
         payment={payment} 
         isOpen={showDetailModal} 
         onClose={() => setShowDetailModal(false)}
+        onUpdate={onUpdate}
       />
     </>
   )
 }
 
-export const paymentColumns: ColumnDef<Payment>[] = [
+export const getPaymentColumns = (onUpdate?: () => void): ColumnDef<Payment>[] => [
   {
-    accessorKey: "studentName",
+    accessorKey: "student",
     header: "Student",
     cell: ({ row }) => (
       <div className="flex flex-col">
-        <span className="font-bold text-sm text-foreground">{row.original.studentName}</span>
-        <span className="text-[10px] text-muted-foreground">{row.original.studentEmail}</span>
+        <span className="font-bold text-sm text-foreground">{row.original.student?.name || "Unknown"}</span>
+        <span className="text-[10px] text-muted-foreground">{row.original.student?.email || "No email"}</span>
       </div>
     ),
   },
   {
-    accessorKey: "courseTitle",
+    accessorKey: "course",
     header: "Course",
     cell: ({ row }) => (
        <div className="max-w-[200px] truncate font-medium text-sm">
-        {row.original.courseTitle}
+        {row.original.course?.title || "Deleted Course"}
       </div>
     ),
   },
@@ -96,9 +97,17 @@ export const paymentColumns: ColumnDef<Payment>[] = [
     },
   },
   {
-    accessorKey: "date",
+    accessorKey: "transactionDate",
     header: "Date",
-    cell: ({ row }) => <div className="text-muted-foreground text-xs">{row.original.date}</div>,
+    cell: ({ row }) => {
+      const dateString = row.original.transactionDate;
+      const formattedDate = dateString ? new Date(dateString).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+      }) : "N/A";
+      return <div className="text-muted-foreground text-xs">{formattedDate}</div>;
+    },
   },
   {
     accessorKey: "status",
@@ -109,14 +118,14 @@ export const paymentColumns: ColumnDef<Payment>[] = [
         <Badge 
           variant="outline" 
           className={`px-2 py-0.5 text-[10px] font-bold border-none ${
-            status === "completed" 
+            status === "confirmed" 
               ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" 
               : status === "pending"
               ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
               : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
           }`}
         >
-          {status === "completed" ? (
+          {status === "confirmed" ? (
             <CheckCircle2Icon className="size-3 mr-1" />
           ) : (
             <ClockIcon className="size-3 mr-1" />
@@ -128,6 +137,6 @@ export const paymentColumns: ColumnDef<Payment>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => <ActionCell payment={row.original} />,
+    cell: ({ row }) => <ActionCell payment={row.original} onUpdate={onUpdate} />,
   },
 ]

@@ -2,14 +2,33 @@
 
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import { Skeleton } from "@/components/ui/skeleton"
 import { Plus } from "lucide-react"
 import { DataTable } from "../../_components/data-table"
 import { adminCourseColumns } from "./columns"
-import { courses as coursesData } from "@/data/courses"
+import { courseService, Course } from "@/services/course.service"
+import { useState, useEffect } from "react"
+import { toast } from "react-hot-toast"
 
 export function AdminCoursesTable() {
   const router = useRouter()
-  const data = coursesData
+  const [courses, setCourses] = useState<Course[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const data = await courseService.getCourses()
+        console.log("Admin Table Data Fetched:", data)
+        setCourses(data)
+      } catch (error) {
+        toast.error("Failed to fetch courses")
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetchCourses()
+  }, [])
 
   return (
     <div className="flex flex-col gap-8">
@@ -27,11 +46,18 @@ export function AdminCoursesTable() {
       </div>
 
       <div className="px-4 lg:px-6 pb-20">
-        <DataTable 
-          columns={adminCourseColumns} 
-          data={Array.isArray(data) ? data : []} 
-          searchPlaceholder="Search courses..."
-        />
+        {isLoading ? (
+          <div className="space-y-4">
+             <Skeleton className="h-12 w-full rounded-xl" />
+             <Skeleton className="h-[400px] w-full rounded-xl" />
+          </div>
+        ) : (
+          <DataTable 
+            columns={adminCourseColumns} 
+            data={courses} 
+            searchPlaceholder="Search courses..."
+          />
+        )}
       </div>
     </div>
   )

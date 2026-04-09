@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Pencil, X, Shield, HeartPulse, Monitor, Brain, Tag } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -30,6 +30,10 @@ const categories = [
 export default function CategoryForm({ initialData, onSave }: CategoryFormProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [value, setValue] = useState(initialData.category)
+
+  useEffect(() => {
+    setValue(initialData.category)
+  }, [initialData.category])
 
   const toggleEdit = () => setIsEditing((current) => !current)
 

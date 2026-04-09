@@ -3,6 +3,9 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Pencil, X, Video, FileText, Upload, CheckCircle, Loader2 } from "lucide-react"
+import { uploadService } from "@/services/upload.service"
+import { Progress } from "@/components/ui/progress"
+import { toast } from "react-hot-toast"
 
 interface ChapterMediaFormProps {
   initialData: {
@@ -16,24 +19,33 @@ interface ChapterMediaFormProps {
 export default function ChapterMediaForm({ initialData, onSave }: ChapterMediaFormProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
   const isVideo = initialData.type === "video"
 
   const toggleEdit = () => setIsEditing((current) => !current)
 
-  const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
 
-    setIsUploading(true)
-    // Simulate upload
-    setTimeout(() => {
-      const fakeUrl = isVideo 
-        ? "https://www.w3schools.com/html/mov_bbb.mp4" 
-        : "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
-      onSave(fakeUrl)
-      setIsUploading(false)
+    const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB
+    if (file.size > MAX_FILE_SIZE) {
+      toast.error("File is too large. Max size is 20MB.");
+      return;
+    }
+
+    try {
+      setIsUploading(true)
+      setUploadProgress(0)
+      const url = await uploadService.uploadFile(file, (pct) => setUploadProgress(pct))
+      onSave(url)
+      toast.success(`${isVideo ? "Video" : "PDF"} uploaded successfully`)
       setIsEditing(false)
-    }, 2000)
+    } catch (error) {
+      toast.error(`Failed to upload ${isVideo ? "video" : "PDF"}`)
+    } finally {
+      setIsUploading(false)
+    }
   }
 
   const currentUrl = initialData.videoUrl || initialData.content
@@ -92,11 +104,16 @@ export default function ChapterMediaForm({ initialData, onSave }: ChapterMediaFo
         <div className="mt-4">
           <div className="flex flex-col items-center justify-center h-60 bg-background/50 rounded-xl border-2 border-dashed border-primary/30 p-8 text-center transition-all hover:border-primary/50">
             {isUploading ? (
-              <div className="flex flex-col items-center gap-y-4">
+              <div className="flex flex-col items-center gap-y-4 w-full px-10">
                  <Loader2 className="size-10 text-primary animate-spin" />
-                 <div className="space-y-1">
-                    <p className="text-sm font-bold">Uploading your {isVideo ? 'video' : 'PDF'}...</p>
-                    <p className="text-xs text-muted-foreground">This may take a few moments</p>
+                 <div className="w-full space-y-2">
+                    <Progress value={uploadProgress} className="h-2" />
+                    <p className="text-xs text-muted-foreground text-center font-medium">
+                       {uploadProgress === 100 ? "Processing on server..." : `${uploadProgress}% uploaded`}
+                    </p>
+                    <p className="text-sm font-bold text-center">
+                       {uploadProgress === 100 ? "Validating file..." : `Uploading your ${isVideo ? 'video' : 'PDF'}...`}
+                    </p>
                  </div>
               </div>
             ) : (

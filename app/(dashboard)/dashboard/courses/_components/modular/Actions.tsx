@@ -15,8 +15,8 @@ import {
 interface ActionsProps {
   disabled: boolean
   isPublished: boolean
-  onPublish: () => void
-  onDelete: () => void
+  onPublish: () => Promise<void>
+  onDelete: () => Promise<void>
 }
 
 export default function Actions({
@@ -26,12 +26,32 @@ export default function Actions({
   onDelete,
 }: ActionsProps) {
   const [showDelete, setShowDelete] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handlePublish = async () => {
+    try {
+      setIsLoading(true);
+      await onPublish();
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  const handleDelete = async () => {
+    try {
+      setIsLoading(true);
+      await onDelete();
+      setShowDelete(false);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   return (
     <div className="flex items-center gap-x-2">
       <Button
-        onClick={onPublish}
-        disabled={disabled}
+        onClick={handlePublish}
+        disabled={disabled || isLoading}
         variant="outline"
         size="sm"
         className="font-semibold hover:bg-primary/10 hover:text-primary hover:border-primary/30"
@@ -54,10 +74,10 @@ export default function Actions({
             </DialogDescription>
           </DialogHeader>
           <div className="flex items-center justify-end gap-x-2 pt-4">
-            <Button variant="ghost" size="sm" onClick={() => setShowDelete(false)} className="hover:bg-primary/10 hover:text-primary">
+            <Button variant="ghost" size="sm" onClick={() => setShowDelete(false)} disabled={isLoading} className="hover:bg-primary/10 hover:text-primary">
               Cancel
             </Button>
-            <Button variant="destructive" size="sm" onClick={onDelete}>
+            <Button variant="destructive" size="sm" onClick={handleDelete} disabled={isLoading}>
               Confirm Delete
             </Button>
           </div>

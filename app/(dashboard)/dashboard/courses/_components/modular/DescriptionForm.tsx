@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Pencil, X } from "lucide-react"
@@ -16,6 +16,10 @@ interface DescriptionFormProps {
 export default function DescriptionForm({ initialData, onSave }: DescriptionFormProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [value, setValue] = useState(initialData.description)
+
+  useEffect(() => {
+    setValue(initialData.description)
+  }, [initialData.description])
 
   const toggleEdit = () => setIsEditing((current) => !current)
 

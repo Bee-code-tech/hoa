@@ -27,14 +27,16 @@ import ImageForm from "../_components/modular/ImageForm"
 import PriceForm from "../_components/modular/PriceForm"
 import ChaptersForm from "../_components/modular/ChaptersForm"
 import Actions from "../_components/modular/Actions"
+import { courseService, Course, Chapter } from "@/services/course.service"
+import { toast } from "react-hot-toast"
 
-const initialCourse = {
+const initialCourse: Course = {
   title: "",
   description: "",
-  image: "",
+  imageUrl: "",
   category: "Security",
-  price: "Free",
-  modules: [],
+  price: 0,
+  chapters: [],
   isPublished: false
 }
 
@@ -51,30 +53,42 @@ export default function NewCoursePage() {
     }
   }, [])
 
-  const updateCourse = (updates: any) => {
+  const updateCourse = (updates: Partial<Course>) => {
     const newCourse = { ...course, ...updates }
     setCourse(newCourse)
     localStorage.setItem("new-course-draft", JSON.stringify(newCourse))
+    
+    // Check if we are editing an existing draft that was already synced to the server
+    // If so, we might want to keep that sync, but the user requested "Save Changes" to be local only.
+    // However, if we HAVE an id, it means it's already on the server.
+    // The user said: "save changes should temporarily save the course fields in the local storage. when i finally click publish then it should create the course."
+    // This implies that even if it HAS an id, we might want to delay sync? 
+    // But usually once it's on the server, we want to keep it in sync.
+    // Given the user's specific request, I will make it LOCAL ONLY until Publish.
   }
 
+  // handleFirstSave is no longer needed as we create on Publish
+  // I will keep a simplified version for the final publish step.
+
   const onAddChapter = (title: string) => {
-    const newChapter = {
+    const newChapter: Chapter = {
       id: Math.random().toString(36).substr(2, 9),
       title,
       isPublished: false,
       isFree: false,
       type: "video" as const,
-      content: ""
+      content: "",
+      position: (course.chapters || []).length
     }
-    updateCourse({ modules: [...(course.modules || []), newChapter] })
+    updateCourse({ chapters: [...(course.chapters || []), newChapter] })
   }
 
-  const onReorderChapters = (updateData: any) => {
-    updateCourse({ modules: [...(course.modules || [])] })
+  const onReorderChapters = (chapters: Chapter[]) => {
+    updateCourse({ chapters })
   }
 
   const onEditChapter = (id: string) => {
-    router.push(`/dashboard/courses/new/modules/${id}`)
+    router.push(`/dashboard/courses/${course.id || 'new'}/modules/${id}`)
   }
 
   if (!isMounted) return null
@@ -82,10 +96,10 @@ export default function NewCoursePage() {
   const requiredFields = [
     course.title,
     course.description,
-    course.image,
+    course.imageUrl,
     course.category,
-    course.price,
-    (course.modules || []).length > 0
+    course.price !== undefined,
+    (course.chapters || []).length > 0 && (course.chapters || []).every(chapter => !!chapter.content)
   ]
 
   const totalFields = requiredFields.length
@@ -140,11 +154,59 @@ export default function NewCoursePage() {
             </div>
             <Actions 
                disabled={!isComplete} 
-               isPublished={course.isPublished} 
-               onPublish={() => updateCourse({ isPublished: !course.isPublished })}
-               onDelete={() => {
-                  localStorage.removeItem("new-course-draft")
-                  router.push("/dashboard/courses")
+               isPublished={!!course.isPublished}                onPublish={async () => {
+                  try {
+                    if (course.id) {
+                      const updated = await courseService.updateCourse(course.id, { ...course, isPublished: !course.isPublished });
+                      setCourse(updated);
+                      toast.success(updated.isPublished ? "Course published" : "Course unpublished");
+                    } else {
+                      // Construct payload EXACTLY as requested by backend
+                      const payload = {
+                        title: course.title,
+                        description: course.description,
+                        imageUrl: course.imageUrl,
+                        category: course.category,
+                        price: Number(course.price || 0),
+                        isPublished: true,
+                        chapters: (course.chapters || []).map((chapter, index) => ({
+                          title: chapter.title,
+                          type: chapter.type,
+                          content: chapter.content,
+                          isFree: !!chapter.isFree,
+                          isPublished: true, // Mark chapters as ready
+                          position: index + 1 // Backend expects 1-indexed
+                        }))
+                      };
+                      
+                      console.log("Sending precise schema-compliant payload:", payload);
+                      
+                      // First time creation
+                      const created = await courseService.createCourse(payload);
+                      setCourse(created);
+                      localStorage.removeItem("new-course-draft");
+                      toast.success("Course created and published");
+                      
+                      // Use slug or fall back to ID for redirect
+                      const target = created.slug || created.id || created._id;
+                      router.push(`/dashboard/courses/${target}/edit`);
+                    }
+                  } catch (e: any) {
+                    console.error("Backend Error - Status 400/500 Detail:", e.response?.data || e.message || e);
+                    toast.error("Failed to update status");
+                  }
+               }}
+               onDelete={async () => {
+                  try {
+                    if (course.id) {
+                      await courseService.deleteCourse(course.id);
+                      toast.success("Course deleted");
+                    }
+                    localStorage.removeItem("new-course-draft")
+                    router.push("/dashboard/courses")
+                  } catch (e) {
+                    toast.error("Failed to delete course");
+                  }
                }}
             />
           </div>
@@ -159,16 +221,16 @@ export default function NewCoursePage() {
               </div>
               
               <TitleForm 
-                initialData={course} 
+                initialData={{ title: course.title || "" }} 
                 onSave={(title) => updateCourse({ title })} 
               />
               <DescriptionForm 
-                initialData={course} 
+                initialData={{ description: course.description || "" }} 
                 onSave={(description) => updateCourse({ description })} 
               />
               <ImageForm 
-                initialData={course} 
-                onSave={(image) => updateCourse({ image })} 
+                initialData={{ imageUrl: course.imageUrl || "" }} 
+                onSave={(imageUrl) => updateCourse({ imageUrl })} 
               />
             </div>
 
@@ -181,9 +243,28 @@ export default function NewCoursePage() {
                     <h2 className="text-xl font-semibold">Course modules</h2>
                   </div>
                   <ChaptersForm 
-                    initialData={{ chapters: course.modules || [] }} 
-                    onAdd={onAddChapter}
-                    onReorder={onReorderChapters}
+                    initialData={{ 
+                      chapters: (course.chapters || []).map(c => ({
+                        id: c.id || "",
+                        title: c.title,
+                        isPublished: !!c.isPublished,
+                        position: c.position,
+                        type: c.type,
+                        content: c.content || "",
+                        isFree: !!c.isFree
+                      }))
+                    }} 
+                    onSave={(chapters) => {
+                      // Preserve IDs and remove 'temp-' prefix when saving to local draft
+                      const sanitized = chapters.map(({ id, ...rest }) => ({
+                        ...rest,
+                        id: id.startsWith("temp-") ? id.replace("temp-", "local-") : id,
+                        content: rest.content || "",
+                        isFree: !!rest.isFree,
+                        isPublished: !!rest.isPublished
+                      }))
+                      updateCourse({ chapters: sanitized as Chapter[] })
+                    }}
                     onEdit={onEditChapter}
                   />
                </div>
@@ -196,11 +277,11 @@ export default function NewCoursePage() {
                     <h2 className="text-xl font-semibold">Pricing and category</h2>
                   </div>
                   <PriceForm 
-                    initialData={course} 
+                    initialData={{ price: course.price || 0 }} 
                     onSave={(price) => updateCourse({ price })} 
                   />
                   <CategoryForm 
-                    initialData={course} 
+                    initialData={{ category: course.category || "" }} 
                     onSave={(category) => updateCourse({ category })} 
                   />
                </div>

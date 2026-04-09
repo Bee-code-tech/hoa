@@ -7,12 +7,13 @@ import { Edit2, Trash2, ExternalLink, MoreVertical } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 export interface CourseData {
-  id: number
+  id?: string
   title: string
-  slug: string
+  slug?: string
   category: string
-  price: string
-  modules: any[]
+  price: number
+  chapters?: any[]
+  isPublished?: boolean
 }
 
 export const adminCourseColumns: ColumnDef<CourseData>[] = [
@@ -38,15 +39,28 @@ export const adminCourseColumns: ColumnDef<CourseData>[] = [
   {
     accessorKey: "price",
     header: "Price",
-    cell: ({ row }) => <span className="font-bold text-gold">{row.original.price}</span>,
+    cell: ({ row }) => (
+      <span className="font-bold text-gold">
+        {row.original.price === 0 ? "Free" : `£${row.original.price}`}
+      </span>
+    ),
   },
   {
-    accessorKey: "modules",
+    accessorKey: "chapters",
     header: "Complexity",
     cell: ({ row }) => (
       <span className="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-[10px] font-bold text-blue-700 ring-1 ring-inset ring-blue-700/10">
-        {row.original.modules?.length || 0} MODULES
+        {row.original.chapters?.length || 0} CHAPTERS
       </span>
+    ),
+  },
+  {
+    accessorKey: "isPublished",
+    header: "Status",
+    cell: ({ row }) => (
+      <Badge variant={row.original.isPublished ? "default" : "secondary"} className="text-[10px]">
+        {row.original.isPublished ? "Published" : "Draft"}
+      </Badge>
     ),
   },
   {
@@ -71,13 +85,6 @@ export const adminCourseColumns: ColumnDef<CourseData>[] = [
             className="size-8 text-muted-foreground hover:text-primary rounded-lg"
           >
             <Edit2 className="size-4" />
-          </Button>
-          <Button 
-            variant="ghost" 
-            size="icon"
-            className="size-8 text-muted-foreground hover:text-destructive rounded-lg"
-          >
-            <Trash2 className="size-4" />
           </Button>
         </div>
       )

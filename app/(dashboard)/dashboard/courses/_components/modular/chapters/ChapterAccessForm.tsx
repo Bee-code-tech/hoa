@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Pencil, X, Lock, Unlock } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -16,6 +16,10 @@ interface ChapterAccessFormProps {
 export default function ChapterAccessForm({ initialData, onSave }: ChapterAccessFormProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [value, setValue] = useState(initialData.isFree)
+
+  useEffect(() => {
+    setValue(initialData.isFree)
+  }, [initialData.isFree])
 
   const toggleEdit = () => setIsEditing((current) => !current)
 

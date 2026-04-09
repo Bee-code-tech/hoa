@@ -17,7 +17,8 @@ import {
   Minimize2,
   ExternalLink
 } from "lucide-react"
-import { courses as coursesData } from "@/data/courses"
+import { courseService, Course, Chapter } from "@/services/course.service"
+import { toast } from "react-hot-toast"
 
 export default function CourseDetailPage() {
   const params = useParams()
@@ -26,40 +27,57 @@ export default function CourseDetailPage() {
   const contentRef = useRef<HTMLDivElement>(null)
   
   // Robust data retrieval
-  const course = Array.isArray(coursesData) ? coursesData.find((c: any) => c.slug === slug || String(c.id) === slug) : null
-  
-  const [activeModule, setActiveModule] = useState<any>(null)
-  const [completedModules, setCompletedModules] = useState<string[]>([])
+  const [course, setCourse] = useState<Course | null>(null)
+  const [activeChapter, setActiveChapter] = useState<Chapter | null>(null)
+  const [completedChapters, setCompletedChapters] = useState<string[]>([])
   const [isFocusMode, setIsFocusMode] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    if (course) {
-      const saved = localStorage.getItem(`completed_modules_${course.id}`)
-      if (saved) setCompletedModules(JSON.parse(saved))
-      setActiveModule(course.modules[0])
+    if (!slug) return;
+    
+    const fetchCourse = async () => {
+      try {
+        const data = await courseService.getCourse(slug as string)
+        setCourse(data)
+        if (data.chapters && data.chapters.length > 0) {
+          setActiveChapter(data.chapters[0])
+        }
+        const saved = localStorage.getItem(`completed_chapters_${data.id || (data as any)._id}`)
+        if (saved) setCompletedChapters(JSON.parse(saved))
+      } catch (error) {
+        toast.error("Failed to load course content")
+      } finally {
+        setIsLoading(false)
+      }
     }
-  }, [course])
+    fetchCourse()
+  }, [slug])
+
+  if (isLoading) {
+    return <div className="flex h-screen items-center justify-center animate-pulse text-muted-foreground font-semibold">Preparing your learning environment...</div>
+  }
 
   if (!course) {
     return (
       <div className="flex h-screen items-center justify-center flex-col gap-4">
         <h1 className="text-2xl font-bold text-primary">Course not found</h1>
-        <p className="text-muted-foreground">The requested course slug "{slug}" does not exist.</p>
+        <p className="text-muted-foreground">The requested course could not be loaded.</p>
         <Button onClick={() => router.push("/dashboard/courses")}>Back to Courses</Button>
       </div>
     )
   }
 
-  const handleMarkComplete = (moduleId: string) => {
-    const newCompleted = [...new Set([...completedModules, moduleId])]
-    setCompletedModules(newCompleted)
-    localStorage.setItem(`completed_modules_${course.id}`, JSON.stringify(newCompleted))
+  const handleMarkComplete = (chapterId: string) => {
+    const newCompleted = [...new Set([...completedChapters, chapterId])]
+    setCompletedChapters(newCompleted)
+    localStorage.setItem(`completed_chapters_${course.id}`, JSON.stringify(newCompleted))
   }
 
-  const isModuleLocked = (index: number) => {
-    if (index < 2) return false
-    const previousModuleId = course.modules[index - 1].id
-    return !completedModules.includes(previousModuleId)
+  const isChapterLocked = (index: number) => {
+    if (index === 0) return false
+    const previousChapterId = course.chapters ? course.chapters[index - 1].id : null
+    return !completedChapters.includes(previousChapterId || "")
   }
 
   const toggleFullScreen = () => {
@@ -71,9 +89,9 @@ export default function CourseDetailPage() {
     }
   }
 
-  const activeModuleIndex = course.modules.findIndex((m: any) => m.id === activeModule?.id)
-  const isActualModuleLocked = activeModuleIndex !== -1 && isModuleLocked(activeModuleIndex)
-  const isCurrentModuleCompleted = activeModuleIndex !== -1 && completedModules.includes(course.modules[activeModuleIndex].id)
+  const activeChapterIndex = (course.chapters || []).findIndex((m: Chapter) => (m.id || m._id) === (activeChapter?.id || activeChapter?._id))
+  const isActualChapterLocked = activeChapterIndex !== -1 && isChapterLocked(activeChapterIndex)
+  const isCurrentChapterCompleted = activeChapterIndex !== -1 && completedChapters.includes((course.chapters || [])[activeChapterIndex].id || "")
 
   return (
     <SidebarProvider
@@ -99,21 +117,22 @@ export default function CourseDetailPage() {
           )}
 
           <div className={`grid grid-cols-1 ${isFocusMode ? "lg:grid-cols-1" : "lg:grid-cols-12"} gap-8 h-full`}>
-            {/* Left Sidebar: Flat Modules List */}
+            {/* Left Sidebar: Flat Chapters List */}
             <div className={`lg:col-span-4 space-y-4 ${isFocusMode ? "hidden" : "block"}`}>
               <div className="p-4 bg-card border rounded-2xl shadow-sm">
                 <h3 className="font-bold text-lg mb-4 px-2">Course Curriculum</h3>
                 <div className="space-y-1">
-                  {course.modules.map((module: any, index: number) => {
-                    const locked = isModuleLocked(index)
-                    const completed = completedModules.includes(module.id)
-                    const active = activeModule?.id === module.id
+                  {(course.chapters || []).map((chapter: Chapter, index: number) => {
+                    const chapterId = chapter.id || (chapter as any)._id || "";
+                    const locked = isChapterLocked(index)
+                    const completed = completedChapters.includes(chapterId)
+                    const active = activeChapter?.id === chapterId || (activeChapter as any)?._id === (chapter as any)._id
                     
                     return (
                       <button
-                        key={module.id}
+                        key={chapterId}
                         disabled={locked}
-                        onClick={() => setActiveModule(module)}
+                        onClick={() => setActiveChapter(chapter)}
                         className={`w-full flex items-center gap-3 p-3 rounded-xl text-sm transition-all relative group ${
                           active
                             ? "bg-primary text-primary-foreground shadow-md scale-[1.02]"
@@ -123,16 +142,16 @@ export default function CourseDetailPage() {
                         }`}
                       >
                         <div className={`p-2 rounded-lg ${active ? 'bg-white/20' : 'bg-muted group-hover:bg-white transition-colors'}`}>
-                          {module.type === 'video' ? (
+                          {chapter.type === 'video' ? (
                             <PlayCircle className="size-4 shrink-0 transition-transform group-hover:scale-110" />
                           ) : (
                             <FileText className="size-4 shrink-0 transition-transform group-hover:scale-110" />
                           )}
                         </div>
                         <div className="flex flex-col items-start flex-1 truncate">
-                          <span className="truncate font-medium">{module.title}</span>
+                          <span className="truncate font-medium">{chapter.title}</span>
                           <span className="text-[10px] uppercase tracking-wider opacity-70">
-                            Module {index + 1} • {module.type}
+                            Chapter {index + 1} • {chapter.type}
                           </span>
                         </div>
                         {locked ? (
@@ -170,9 +189,9 @@ export default function CourseDetailPage() {
                     <Fullscreen className="size-4" /> Fullscreen
                   </Button>
                 </div>
-                {activeModule?.type === 'pdf' && !isActualModuleLocked && (
+                {activeChapter?.type === 'pdf' && !isActualChapterLocked && (
                   <Button variant="ghost" size="sm" asChild>
-                    <a href={activeModule.content} target="_blank" rel="noopener noreferrer" className="gap-2">
+                    <a href={activeChapter.content} target="_blank" rel="noopener noreferrer" className="gap-2">
                       <ExternalLink className="size-4" /> Open Original
                     </a>
                   </Button>
@@ -180,38 +199,38 @@ export default function CourseDetailPage() {
               </div>
 
               <div ref={contentRef} className={`aspect-video w-full overflow-hidden rounded-3xl bg-black border shadow-2xl relative transition-all duration-300 flex-1 ${isFocusMode ? "max-h-[85vh]" : ""}`}>
-                {isActualModuleLocked ? (
+                {isActualChapterLocked ? (
                   <div className="w-full h-full flex flex-col items-center justify-center bg-zinc-900 text-white p-8 text-center space-y-4">
                     <div className="size-20 bg-white/5 rounded-full flex items-center justify-center mb-4">
                        <Lock className="size-10 text-gold animate-pulse" />
                     </div>
-                    <h3 className="text-2xl font-bold">This Module is Locked</h3>
+                    <h3 className="text-2xl font-bold">This Chapter is Locked</h3>
                     <p className="text-white/60 max-w-sm">
-                      Please complete the previous module ("{course.modules[activeModuleIndex - 1].title}") to unlock this content.
+                      Please complete the previous chapter ("{(course.chapters || [])[activeChapterIndex - 1].title}") to unlock this content.
                     </p>
-                    <Button variant="outline" className="text-white border-white/20 hover:bg-white/10" onClick={() => setActiveModule(course.modules[activeModuleIndex - 1])}>
-                      Go to Previous Module
+                    <Button variant="outline" className="text-white border-white/20 hover:bg-white/10" onClick={() => setActiveChapter((course.chapters || [])[activeChapterIndex - 1])}>
+                      Go to Previous Chapter
                     </Button>
                   </div>
-                ) : activeModule ? (
-                  activeModule.type === 'video' ? (
+                ) : activeChapter ? (
+                  activeChapter.type === 'video' ? (
                     <iframe
                       className="w-full h-full"
-                      src={activeModule.content}
-                      title={activeModule.title}
+                      src={activeChapter.content}
+                      title={activeChapter.title}
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
                     />
                   ) : (
                     <iframe
                       className="w-full h-full bg-white"
-                      src={`https://docs.google.com/viewer?url=${encodeURIComponent(activeModule.content)}&embedded=true`}
-                      title={activeModule.title}
+                      src={`https://docs.google.com/viewer?url=${encodeURIComponent(activeChapter.content || "")}&embedded=true`}
+                      title={activeChapter.title}
                     />
                   )
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-white/50">
-                    Select a module to start learning
+                    Select a chapter to start learning
                   </div>
                 )}
               </div>
@@ -221,23 +240,23 @@ export default function CourseDetailPage() {
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                      <div className="space-y-1">
                        <h2 className="text-2xl lg:text-3xl font-bold tracking-tight text-primary">
-                        {activeModule?.title || course.title}
+                        {activeChapter?.title || course.title}
                       </h2>
                       <p className="text-sm text-muted-foreground font-medium uppercase tracking-wide">
-                        {course.category} Certification • Module {activeModuleIndex + 1}
+                        {course.category} Certification • Chapter {activeChapterIndex + 1}
                       </p>
                      </div>
-                    {activeModuleIndex !== -1 && !isCurrentModuleCompleted && !isActualModuleLocked && (
+                    {activeChapterIndex !== -1 && !isCurrentChapterCompleted && !isActualChapterLocked && (
                       <Button 
-                        onClick={() => handleMarkComplete(course.modules[activeModuleIndex].id)}
+                        onClick={() => handleMarkComplete((course.chapters || [])[activeChapterIndex].id || (course.chapters || [])[activeChapterIndex]._id || "")}
                         className="gap-2 sm:w-fit"
                       >
-                        <CheckCircle className="size-4" /> Mark Module Complete
+                        <CheckCircle className="size-4" /> Mark Chapter Complete
                       </Button>
                     )}
-                    {isCurrentModuleCompleted && (
+                    {isCurrentChapterCompleted && (
                        <div className="flex items-center gap-2 text-green-600 bg-green-50 px-4 py-2 rounded-full text-sm font-semibold border border-green-100">
-                         <CheckCircle className="size-4" /> Module Completed
+                         <CheckCircle className="size-4" /> Chapter Completed
                        </div>
                     )}
                   </div>

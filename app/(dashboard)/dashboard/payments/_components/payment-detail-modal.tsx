@@ -93,7 +93,7 @@ export function PaymentDetailModal({
               <span className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-1">
                 <UserIcon className="size-3" /> Student Name
               </span>
-              <p className="text-sm font-semibold text-foreground">{payment.student?.name || "Unknown"}</p>
+              <p className="text-sm font-semibold text-foreground">{payment.student?.fullname || payment.student?.name || "Unknown"}</p>
               <p className="text-xs text-muted-foreground">{payment.student?.email || "No email"}</p>
             </div>
             <div className="space-y-1 text-right">

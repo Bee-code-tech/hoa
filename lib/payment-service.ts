@@ -6,7 +6,8 @@ export interface Payment {
   _id: string;
   student: {
     _id: string;
-    name: string;
+    fullname?: string;
+    name?: string;
     email: string;
   };
   course: {

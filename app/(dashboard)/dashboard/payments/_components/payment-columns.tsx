@@ -69,7 +69,7 @@ export const getPaymentColumns = (onUpdate?: () => void): ColumnDef<Payment>[] =
     header: "Student",
     cell: ({ row }) => (
       <div className="flex flex-col">
-        <span className="font-bold text-sm text-foreground">{row.original.student?.name || "Unknown"}</span>
+        <span className="font-bold text-sm text-foreground">{row.original.student?.fullname || row.original.student?.name || "Unknown"}</span>
         <span className="text-[10px] text-muted-foreground">{row.original.student?.email || "No email"}</span>
       </div>
     ),
